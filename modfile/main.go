@@ -2,6 +2,7 @@ package modfile
 
 import (
 	"fmt"
+	"net/url"
 	"strings"
 
 	"github.com/JXSnack/flatmod/dependency"
@@ -16,7 +17,7 @@ type File struct {
 	Group        string
 	Follow       string
 	Dependencies []dependency.Dependency
-	Mavens       []string
+	Mavens       []url.URL
 }
 
 func Read(data []byte, path string) (*File, error) {

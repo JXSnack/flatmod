@@ -12,11 +12,10 @@ func applyMavenInstruction(file *File, body string) error {
 		return fmt.Errorf("illegal maven url: %w", err)
 	}
 
-	maven := u.String()
-	if slices.Contains(file.Mavens, maven) {
-		return fmt.Errorf("multiple maven repositories of %q", maven)
+	if slices.Contains(file.Mavens, *u) {
+		return fmt.Errorf("multiple maven repositories of %q", u.String())
 	}
 
-	file.Mavens = append(file.Mavens, body)
+	file.Mavens = append(file.Mavens, *u)
 	return nil
 }
