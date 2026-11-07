@@ -9,8 +9,8 @@ import (
 var FileDir = ""
 var InfoDir = ""
 
-// InitCache ensures all cache-related directories are loaded
-func InitCache() error {
+// Init ensures all cache-related directories are loaded
+func Init() error {
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return fmt.Errorf("cache: %w", err)

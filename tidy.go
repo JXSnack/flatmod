@@ -15,7 +15,7 @@ func Tidy() {
 	}
 
 	// init cache
-	err := cache.InitCache()
+	err := cache.Init()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%v", err)
 		os.Exit(1)
