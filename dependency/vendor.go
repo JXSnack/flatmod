@@ -20,6 +20,11 @@ type Vendor interface {
 //	(Maven, "com.example:dependency", nil)
 func ParseLink(link string) (Vendor, string, error) {
 	parts := strings.SplitN(link, "@", 2)
+	if len(parts) == 1 {
+		parts = append(parts[:1], parts[0:]...)
+		parts[0] = ""
+	}
+
 	if len(parts) != 2 {
 		return nil, "", fmt.Errorf("incorrect dependency format")
 	}
