@@ -1,6 +1,8 @@
 package dependency
 
+import "github.com/JXSnack/jmod/version"
+
 type Dependency struct {
 	Vendor  Vendor
-	Version Version
+	Version version.Version
 }
