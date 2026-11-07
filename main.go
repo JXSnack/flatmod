@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"slices"
 )
 
 func main() {
@@ -16,7 +17,25 @@ func main() {
 		return
 	}
 
-	if os.Args[1] == "check" {
+	switch os.Args[1] {
+	case "check":
 		Check()
+	case "idea":
+		Idea()
+	default:
+		fmt.Fprintln(os.Stderr, fmt.Sprintf("%s: unknown command", os.Args[1]))
+		os.Exit(1)
+	}
+}
+
+func Vprintln(a ...any) {
+	if slices.Contains(os.Args, "-v") {
+		fmt.Println(a...)
+	}
+}
+
+func Vprintf(format string, a ...any) {
+	if slices.Contains(os.Args, "-v") {
+		fmt.Printf(format, a...)
 	}
 }
