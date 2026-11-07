@@ -21,8 +21,15 @@ func Read(data []byte, path string) (*File, error) {
 	lines := strings.Split(string(data), "\n")
 
 	for i, line := range lines {
+		line = strings.TrimSpace(line)
+
 		instruction := strings.SplitN(line, " ", 2)
-		if len(instruction) != 2 {
+		name := instruction[0]
+		if name == "" {
+			continue
+		}
+
+		if len(instruction) == 1 {
 			return nil, wrapErr(path, i+1, fmt.Errorf("unfinished instruction"))
 		}
 
@@ -31,7 +38,7 @@ func Read(data []byte, path string) (*File, error) {
 			continue
 		}
 
-		switch instruction[0] {
+		switch name {
 		case "group":
 			err := applyGroupInstruction(file, body)
 			if err != nil {
@@ -47,6 +54,8 @@ func Read(data []byte, path string) (*File, error) {
 			if err != nil {
 				return nil, wrapErr(path, i+1, err)
 			}
+		default:
+			return nil, wrapErr(path, i+1, fmt.Errorf("unknown statement: %s", name))
 		}
 	}
 
@@ -54,5 +63,5 @@ func Read(data []byte, path string) (*File, error) {
 }
 
 func wrapErr(path string, line int, err error) error {
-	return fmt.Errorf("%s:%d: %w", line, err)
+	return fmt.Errorf("%s:%d: %w", path, line, err)
 }
