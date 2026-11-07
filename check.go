@@ -44,8 +44,13 @@ func Check() {
 	}
 
 	if !strings.HasSuffix(path, ".fmod") {
-		log.Fatal("check: invalid path, must end with .fmod")
+		path += ".fmod"
+		if _, err := os.Stat(path); err != nil {
+			log.Fatalf("check: no file at %s", path)
+		}
 	}
+
+	fmt.Println(fmt.Sprintf("using %s", path))
 
 	data, err := os.ReadFile(path)
 	if err != nil {
