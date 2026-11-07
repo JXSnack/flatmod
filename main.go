@@ -7,9 +7,9 @@ import (
 
 func main() {
 	if len(os.Args) == 1 {
-		fmt.Println("Jmod is used for managing Jmod projects.")
+		fmt.Println("fmod is used for managing Flatmod source code.")
 		fmt.Println()
-		fmt.Println("Usage: jmod <command> [args]")
+		fmt.Println("Usage: fmod <command> [args]")
 		fmt.Println()
 		fmt.Println("All commands:")
 		fmt.Println("\tcheck\tread configuration files for errors")
