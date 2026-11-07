@@ -16,6 +16,7 @@ type File struct {
 	Group        string
 	Follow       string
 	Dependencies []dependency.Dependency
+	Mavens       []string
 }
 
 func Read(data []byte, path string) (*File, error) {
@@ -40,24 +41,22 @@ func Read(data []byte, path string) (*File, error) {
 			continue
 		}
 
+		var err error
 		switch name {
 		case "group":
-			err := applyGroupInstruction(file, body)
-			if err != nil {
-				return nil, wrapErr(path, i+1, err)
-			}
+			err = applyGroupInstruction(file, body)
 		case "follow":
-			err := applyFollowInstruction(file, body)
-			if err != nil {
-				return nil, wrapErr(path, i+1, err)
-			}
+			err = applyFollowInstruction(file, body)
+		case "maven":
+			err = applyMavenInstruction(file, body)
 		case "require":
-			err := applyRequireInstruction(file, body)
-			if err != nil {
-				return nil, wrapErr(path, i+1, err)
-			}
+			err = applyRequireInstruction(file, body)
 		default:
 			return nil, wrapErr(path, i+1, fmt.Errorf("unknown statement: %s", name))
+		}
+
+		if err != nil {
+			return nil, wrapErr(path, i+1, err)
 		}
 	}
 
