@@ -3,6 +3,9 @@ package cache
 import (
 	"fmt"
 	"os"
+	"path/filepath"
+
+	"github.com/JXSnack/flatmod/helper"
 )
 
 // Read compares the cached checksum to the requested checksum. If they are
@@ -33,10 +36,19 @@ func Read(path string, checksum [16]byte, get func() ([]byte, error)) ([]byte, e
 				// read from cache
 				data, err := os.ReadFile(diskPath)
 				if err == nil {
+					helper.Vprintf("cache: HIT read %q\n", path)
 					return data, nil
 				}
+
+				helper.Vprintf("cache: MISS read %q (%v)\n", path, err)
+			} else {
+				helper.Vprintf("cache: MISS read %q (checksum)\n", path)
 			}
+		} else {
+			helper.Vprintf("cache: MISS read %q (%v)\n", path, err)
 		}
+	} else {
+		helper.Vprintf("cache: MISS read %q (%v)\n", path, err)
 	}
 
 	// escalate errors
@@ -48,7 +60,7 @@ func Read(path string, checksum [16]byte, get func() ([]byte, error)) ([]byte, e
 	// write
 	err = Write(path, checksum, data)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, err.Error())
+		fmt.Fprintf(os.Stderr, "cache (w): %v", err)
 	}
 
 	return data, nil

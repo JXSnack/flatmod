@@ -67,12 +67,14 @@ func Get(url string, branch string) (Config, error) {
 		defer os.RemoveAll(dir)
 
 		// clone
+		helper.Vprintf("follow: cloning %s:%s\n", url, branch)
 		_, err = git.PlainClone(dir, false, &git.CloneOptions{URL: url})
 		if err != nil {
 			return []byte{}, fmt.Errorf("failed to clone: %w", err)
 		}
 
 		// zip
+		helper.Vprintln("follow: zipping repository")
 		data, err := zipPath(dir)
 		if err != nil {
 			return []byte{}, err
