@@ -1,6 +1,7 @@
 package version
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 )
@@ -38,6 +39,15 @@ func (s Semantic) IsNewerThan(version Version) bool {
 	}
 
 	return false
+}
+
+func (s Semantic) String() string {
+	r := fmt.Sprintf("v%d.%d.%d", s.Major, s.Minor, s.Patch)
+	if s.PreRelease != "" {
+		r += fmt.Sprintf("-%s", s.PreRelease)
+	}
+
+	return r
 }
 
 func IsSemantic(version string) bool {

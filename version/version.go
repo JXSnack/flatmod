@@ -3,6 +3,7 @@ package version
 type Version interface {
 	Kind() string
 	IsNewerThan(version Version) bool
+	String() string
 }
 
 func Parse(version string) Version {

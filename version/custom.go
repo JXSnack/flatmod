@@ -11,3 +11,7 @@ func (c Custom) Kind() string {
 func (c Custom) IsNewerThan(version Version) bool {
 	return false
 }
+
+func (c Custom) String() string {
+	return c.V
+}
