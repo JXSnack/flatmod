@@ -1,4 +1,4 @@
-package gradle
+package follow
 
 import (
 	"slices"
