@@ -52,8 +52,12 @@ func Check() {
 		log.Fatal(fmt.Errorf("check: %w", err))
 	}
 
-	_, err = modfile.Read(data, path)
+	file, err := modfile.Read(data, path)
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	if ok, problems := file.CheckValidity(); !ok {
+		fmt.Println(strings.Join(problems, "\n"))
 	}
 }

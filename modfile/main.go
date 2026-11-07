@@ -11,13 +11,15 @@ import (
 // TODO: multiple resource directories
 
 type File struct {
+	path string
+
 	Group        string
 	Follow       string
 	Dependencies []dependency.Dependency
 }
 
 func Read(data []byte, path string) (*File, error) {
-	file := &File{}
+	file := &File{path: path}
 	lines := strings.Split(string(data), "\n")
 
 	for i, line := range lines {
@@ -64,4 +66,18 @@ func Read(data []byte, path string) (*File, error) {
 
 func wrapErr(path string, line int, err error) error {
 	return fmt.Errorf("%s:%d: %w", path, line, err)
+}
+
+func (f *File) CheckValidity() (bool, []string) {
+	problems := make([]string, 0)
+
+	if f.Group == "" {
+		problems = append(problems, fmt.Sprintf("%s: missing group", f.path))
+	}
+
+	if f.Follow == "" {
+		problems = append(problems, fmt.Sprintf("%s: missing follow", f.path))
+	}
+
+	return len(problems) == 0, problems
 }
