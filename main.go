@@ -27,6 +27,7 @@ func main() {
 		fmt.Println("All commands:")
 		fmt.Println("\tcheck\tread configuration files for errors")
 		fmt.Println("\tidea\tupdate IntelliJ configuration")
+		fmt.Println("\ttidy\tensure .fmod matches source code")
 		return
 	}
 
@@ -35,6 +36,8 @@ func main() {
 		Check()
 	case "idea":
 		Idea()
+	case "tidy":
+		Tidy()
 	default:
 		fmt.Fprintln(os.Stderr, fmt.Sprintf("%s: unknown command", os.Args[1]))
 		os.Exit(1)
