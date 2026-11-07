@@ -3,18 +3,16 @@ package main
 import (
 	"fmt"
 	"os"
-	"slices"
 	"strings"
 
+	"github.com/JXSnack/flatmod/helper"
 	"github.com/JXSnack/flatmod/modfile"
 )
-
-var Opts []string
 
 func main() {
 	for i, arg := range os.Args {
 		if strings.HasPrefix(arg, "-") {
-			Opts = append(Opts, strings.TrimPrefix(arg, "-"))
+			helper.Opts = append(helper.Opts, strings.TrimPrefix(arg, "-"))
 			os.Args = append(os.Args[:i], os.Args[i+1:]...)
 		}
 	}
@@ -45,13 +43,13 @@ func main() {
 }
 
 func Vprintln(a ...any) {
-	if slices.Contains(Opts, "v") || slices.Contains(Opts, "-verbose") {
+	if helper.IsVerbose() {
 		fmt.Println(a...)
 	}
 }
 
 func Vprintf(format string, a ...any) {
-	if slices.Contains(Opts, "v") || slices.Contains(Opts, "-verbose") {
+	if helper.IsVerbose() {
 		fmt.Printf(format, a...)
 	}
 }
