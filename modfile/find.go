@@ -40,6 +40,10 @@ func Find(path string) (*File, error) {
 			return nil
 		})
 
+		if !strings.HasSuffix(path, ".fmod") {
+			err = fmt.Errorf("no .fmod file in current directory")
+		}
+
 		if err != nil {
 			return nil, err
 		}
