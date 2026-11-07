@@ -1,13 +1,54 @@
 package main
 
 import (
-	"net/url"
+	"fmt"
+	"strings"
 
 	"github.com/JXSnack/jmod/dependency"
 )
 
+// TODO: multiple src directories
+// TODO: multiple resource directories
+
 type File struct {
 	Group        string
-	Follow       url.URL
+	Follow       string
 	Dependencies []dependency.Dependency
+}
+
+func Read(data []byte) (*File, error) {
+	file := &File{}
+	lines := strings.Split(string(data), "\n")
+
+	for i, line := range lines {
+		instruction := strings.SplitN(line, " ", 2)
+		if len(instruction) != 2 {
+			return nil, fmt.Errorf("unfinished instruction on line %d", i+1)
+		}
+		body := instruction[1]
+
+		switch instruction[0] {
+		case "group":
+			err := applyGroupInstruction(file, body)
+			if err != nil {
+				return nil, wrapErr(i+1, err)
+			}
+		case "follow":
+			err := applyFollowInstruction(file, body)
+			if err != nil {
+				return nil, wrapErr(i+1, err)
+			}
+		case "require":
+			err := applyRequireInstruction(file, body)
+			if err != nil {
+				return nil, wrapErr(i+1, err)
+			}
+		}
+	}
+
+	return file, nil
+}
+
+func wrapErr(line int, err error) error {
+	return fmt.Errorf("(line %d) %w", line, err)
 }
