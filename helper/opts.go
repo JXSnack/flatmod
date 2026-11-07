@@ -11,3 +11,7 @@ func IsVerbose() bool {
 func ForceGitHTTPS() bool {
 	return slices.Contains(Opts, "-git-https")
 }
+
+func IsNoCache() bool {
+	return slices.Contains(Opts, "-no-cache")
+}

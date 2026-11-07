@@ -12,3 +12,4 @@ based on the idea that flat development is less likely to intertwine and easier 
 |-------------------|---------------------------------------|
 | `-v`, `--verbose` | print more information                |
 | `--git-https`     | force a git https over ssh connection |
+| `--no-cache`      | fully disable cache                   |

@@ -4,12 +4,18 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+
+	"github.com/JXSnack/flatmod/helper"
 )
 
 func Write(path string, checksum [16]byte, data []byte) error {
 	// skip if cache isn't initialized
 	if InfoDir == "" || FileDir == "" {
 		return fmt.Errorf("cache isn't initialized, skipping write for %q", path)
+	}
+
+	if helper.IsNoCache() {
+		return nil
 	}
 
 	// create directories

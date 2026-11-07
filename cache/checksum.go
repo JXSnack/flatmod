@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+
+	"github.com/JXSnack/flatmod/helper"
 )
 
 // cachedChecksums stores checksums that were accessed previously and
@@ -18,6 +20,10 @@ func GetChecksum(path string) ([16]byte, error) {
 	// skip if cache isn't initialized
 	if InfoDir == "" || FileDir == "" {
 		return [16]byte{}, fmt.Errorf("cache isn't initialized, skipping GetChecksum for %q", path)
+	}
+
+	if helper.IsNoCache() {
+		return [16]byte{}, fmt.Errorf("cache is disabled")
 	}
 
 	// check cache

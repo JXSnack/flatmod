@@ -26,6 +26,10 @@ func Read(path string, checksum [16]byte, get func() ([]byte, error)) ([]byte, e
 		return get()
 	}
 
+	if helper.IsNoCache() {
+		return get()
+	}
+
 	// check if cached
 	diskPath := filepath.Join(FileDir, path)
 	if _, err := os.Stat(diskPath); err == nil {
