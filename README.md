@@ -1,4 +1,4 @@
-# jmod
+# multimod
 <img align="right" src="github/badge.png"/>
 
 An opinionated reimagination of the Minecraft modding toolchain, to ease coordination of 
