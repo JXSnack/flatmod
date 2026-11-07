@@ -32,15 +32,8 @@ func (f *File) Tidy() string {
 
 		for _, dep := range f.Dependencies {
 			b.WriteString("require ")
-			b.WriteString(dep.Vendor.Identifier())
-			b.WriteString("@")
-			b.WriteString(dep.Link)
-			b.WriteString(" ")
-			b.WriteString(dep.Version.String())
-
-			if dep.Indirect {
-				b.WriteString(" // indirect\n")
-			}
+			b.WriteString(dep.String())
+			b.WriteString("\n")
 		}
 	}
 
