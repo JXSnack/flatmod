@@ -11,7 +11,7 @@ import (
 // TODO: multiple resource directories
 
 type File struct {
-	path string
+	Path string
 
 	Group        string
 	Follow       string
@@ -19,7 +19,7 @@ type File struct {
 }
 
 func Read(data []byte, path string) (*File, error) {
-	file := &File{path: path}
+	file := &File{Path: path}
 	lines := strings.Split(string(data), "\n")
 
 	for i, line := range lines {
@@ -72,11 +72,11 @@ func (f *File) CheckValidity() (bool, []string) {
 	problems := make([]string, 0)
 
 	if f.Group == "" {
-		problems = append(problems, fmt.Sprintf("%s: missing group", f.path))
+		problems = append(problems, fmt.Sprintf("%s: missing group", f.Path))
 	}
 
 	if f.Follow == "" {
-		problems = append(problems, fmt.Sprintf("%s: missing follow", f.path))
+		problems = append(problems, fmt.Sprintf("%s: missing follow", f.Path))
 	}
 
 	return len(problems) == 0, problems
