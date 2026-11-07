@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/JXSnack/jmod/dependency"
+	"github.com/JXSnack/flatmod/dependency"
 )
 
 // TODO: multiple src directories

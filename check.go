@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/JXSnack/jmod/modfile"
+	"github.com/JXSnack/flatmod/modfile"
 )
 
 // TODO: multiple errors instead of breaking at the first problem
