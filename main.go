@@ -26,6 +26,7 @@ func main() {
 		fmt.Println()
 		fmt.Println("All commands:")
 		fmt.Println("\tcheck\tread configuration files for errors")
+		fmt.Println("\tidea\tupdate IntelliJ configuration")
 		return
 	}
 
