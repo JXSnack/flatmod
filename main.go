@@ -2,10 +2,21 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/JXSnack/jmod/version"
+	"os"
 )
 
 func main() {
-	fmt.Println(version.Parse("v1.0.0"))
+	if len(os.Args) == 1 {
+		fmt.Println("Jmod is used for managing Jmod projects.")
+		fmt.Println()
+		fmt.Println("Usage: jmod <command> [args]")
+		fmt.Println()
+		fmt.Println("All commands:")
+		fmt.Println("\tcheck\tread configuration files for errors")
+		return
+	}
+
+	if os.Args[1] == "check" {
+		Check()
+	}
 }
