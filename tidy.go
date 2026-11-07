@@ -5,11 +5,32 @@ import (
 	"os"
 
 	"github.com/JXSnack/flatmod/cache"
+	"github.com/JXSnack/flatmod/follow"
 )
 
 func Tidy() {
 	file := GetMod("tidy")
 	if file == nil {
+		os.Exit(1)
+	}
+
+	// init cache
+	err := cache.InitCache()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%v", err)
+		os.Exit(1)
+	}
+
+	// load follow
+	config, err := follow.Get(file.Follow, file.FollowBranch)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "follow: %v", err)
+		os.Exit(1)
+	}
+
+	err = follow.ApplyConfigToFile(config, file)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "apply follow: %v", err)
 		os.Exit(1)
 	}
 
@@ -23,13 +44,6 @@ func Tidy() {
 	err = os.WriteFile(file.Path, []byte(file.Tidy()), stat.Mode())
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "tidy: %v", err)
-		os.Exit(1)
-	}
-
-	// init cache
-	err = cache.InitCache()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%v", err)
 		os.Exit(1)
 	}
 }
