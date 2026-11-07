@@ -16,14 +16,14 @@ type File struct {
 	Dependencies []dependency.Dependency
 }
 
-func Read(data []byte) (*File, error) {
+func Read(data []byte, path string) (*File, error) {
 	file := &File{}
 	lines := strings.Split(string(data), "\n")
 
 	for i, line := range lines {
 		instruction := strings.SplitN(line, " ", 2)
 		if len(instruction) != 2 {
-			return nil, fmt.Errorf("unfinished instruction on line %d", i+1)
+			return nil, wrapErr(path, i+1, fmt.Errorf("unfinished instruction"))
 		}
 		body := instruction[1]
 
@@ -31,17 +31,17 @@ func Read(data []byte) (*File, error) {
 		case "group":
 			err := applyGroupInstruction(file, body)
 			if err != nil {
-				return nil, wrapErr(i+1, err)
+				return nil, wrapErr(path, i+1, err)
 			}
 		case "follow":
 			err := applyFollowInstruction(file, body)
 			if err != nil {
-				return nil, wrapErr(i+1, err)
+				return nil, wrapErr(path, i+1, err)
 			}
 		case "require":
 			err := applyRequireInstruction(file, body)
 			if err != nil {
-				return nil, wrapErr(i+1, err)
+				return nil, wrapErr(path, i+1, err)
 			}
 		}
 	}
@@ -49,6 +49,6 @@ func Read(data []byte) (*File, error) {
 	return file, nil
 }
 
-func wrapErr(line int, err error) error {
-	return fmt.Errorf("(line %d) %w", line, err)
+func wrapErr(path string, line int, err error) error {
+	return fmt.Errorf("%s:%d: %w", line, err)
 }
