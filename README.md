@@ -8,8 +8,8 @@ based on the idea that flat development is less likely to intertwine and easier 
 
 ## Options
 
-| Name              | Action                                |
-|-------------------|---------------------------------------|
-| `-v`, `--verbose` | print more information                |
-| `--git-https`     | force a git https over ssh connection |
-| `--no-cache`      | fully disable cache                   |
+| Name              | Action                                  |
+|-------------------|-----------------------------------------|
+| `-v`, `--verbose` | print more information                  |
+| `--git-https`     | force a git https over ssh connection   |
+| `--no-cache`      | fully disable cache reading and writing |
