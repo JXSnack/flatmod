@@ -13,6 +13,8 @@ func (f *File) Tidy() string {
 	// follow
 	b.WriteString("follow ")
 	b.WriteString(f.Follow)
+	b.WriteString(" ")
+	b.WriteString(f.FollowBranch)
 	b.WriteString("\n")
 
 	// mavens

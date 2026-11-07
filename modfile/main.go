@@ -15,6 +15,7 @@ type File struct {
 
 	Group        string
 	Follow       string
+	FollowBranch string
 	Dependencies []dependency.Dependency
 	Mavens       []string
 }
