@@ -1,13 +1,12 @@
 package cache
 
 import (
-	"crypto/md5"
 	"fmt"
 	"os"
 	"path/filepath"
 )
 
-func Write(path string, data []byte) error {
+func Write(path string, checksum [16]byte, data []byte) error {
 	// skip if cache isn't initialized
 	if InfoDir == "" || FileDir == "" {
 		return fmt.Errorf("cache isn't initialized, skipping write for %q", path)
@@ -31,7 +30,6 @@ func Write(path string, data []byte) error {
 	}
 
 	// update checksum
-	checksum := md5.Sum(data)
 	if err := os.WriteFile(sumPath, checksum[:], 0644); err != nil {
 		os.Remove(diskPath) // remove cached file
 		return fmt.Errorf("failed checksum write: %w", err)
