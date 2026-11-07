@@ -16,7 +16,7 @@ import (
 func Check() {
 	path := ""
 	if len(os.Args) < 3 {
-		err := filepath.WalkDir("", func(candidate string, d fs.DirEntry, err error) error {
+		err := filepath.WalkDir(".", func(candidate string, d fs.DirEntry, err error) error {
 			if d != nil && d.IsDir() {
 				return nil
 			}
