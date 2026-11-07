@@ -1,8 +1,6 @@
 package gradle
 
 import (
-	"fmt"
-	"net/url"
 	"slices"
 
 	"github.com/JXSnack/flatmod/dependency"
@@ -36,16 +34,11 @@ func ApplyConfigToFile(c Config, file *modfile.File) error {
 	}
 
 	for _, maven := range c.Maven {
-		u, err := url.Parse(maven)
-		if err != nil {
-			return fmt.Errorf("illegal maven url: %w", err)
-		}
-
-		if slices.Contains(file.Mavens, *u) {
+		if slices.Contains(file.Mavens, maven) {
 			continue
 		}
 
-		file.Mavens = append(file.Mavens, *u)
+		file.Mavens = append(file.Mavens, maven)
 	}
 
 	return nil
