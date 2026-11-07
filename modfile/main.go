@@ -25,7 +25,11 @@ func Read(data []byte, path string) (*File, error) {
 		if len(instruction) != 2 {
 			return nil, wrapErr(path, i+1, fmt.Errorf("unfinished instruction"))
 		}
-		body := instruction[1]
+
+		body := strings.SplitN(instruction[1], "//", 2)[0]
+		if strings.TrimSpace(body) == "" {
+			continue
+		}
 
 		switch instruction[0] {
 		case "group":
