@@ -24,8 +24,6 @@ func (f *File) Tidy() string {
 			b.WriteString(maven)
 			b.WriteString("\n")
 		}
-
-		b.WriteString("\n")
 	}
 
 	// dependencies
@@ -41,11 +39,9 @@ func (f *File) Tidy() string {
 			b.WriteString(dep.Version.String())
 
 			if dep.Indirect {
-				b.WriteString(" // indirect")
+				b.WriteString(" // indirect\n")
 			}
 		}
-
-		b.WriteString("\n")
 	}
 
 	return b.String()
