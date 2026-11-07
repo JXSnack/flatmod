@@ -42,18 +42,6 @@ func main() {
 	}
 }
 
-func Vprintln(a ...any) {
-	if helper.IsVerbose() {
-		fmt.Println(a...)
-	}
-}
-
-func Vprintf(format string, a ...any) {
-	if helper.IsVerbose() {
-		fmt.Printf(format, a...)
-	}
-}
-
 func GetMod(command string) *modfile.File {
 	path := ""
 	if len(os.Args) > 2 {
@@ -66,7 +54,7 @@ func GetMod(command string) *modfile.File {
 		return nil
 	}
 
-	Vprintf("using %s\n", file.Path)
+	helper.Vprintf("using %s\n", file.Path)
 
 	if ok, problems := file.CheckValidity(); !ok {
 		fmt.Fprintln(os.Stderr, strings.Join(problems, "\n"))
