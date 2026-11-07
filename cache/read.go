@@ -11,10 +11,12 @@ import (
 // is automatically saved to the cache.
 //
 // If the cache isn't initialized, Read always returns get and prints a warning.
+// The function does not return any errors by itself, it only escalates errors
+// from get. If get returns an error, its value is not cached.
 //
 // Cached values are reused between flatmod projects to avoid unnecessary
 // information duplication.
-func Read(path string, checksum [16]byte, get func() []byte) []byte {
+func Read(path string, checksum [16]byte, get func() ([]byte, error)) ([]byte, error) {
 	// skip if cache isn't initialized
 	if InfoDir == "" || FileDir == "" {
 		fmt.Fprintf(os.Stderr, "cache isn't initialized, skipping read for %q", path)
@@ -30,17 +32,23 @@ func Read(path string, checksum [16]byte, get func() []byte) []byte {
 				// read from cache
 				data, err := os.ReadFile(path)
 				if err == nil {
-					return data
+					return data, nil
 				}
 			}
 		}
 	}
 
-	data := get()
-	err := Write(path, data)
+	// escalate errors
+	data, err := get()
+	if err != nil {
+		return data, err
+	}
+
+	// write
+	err = Write(path, checksum, data)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, err.Error())
 	}
 
-	return data
+	return data, nil
 }
