@@ -5,6 +5,8 @@ import (
 	"os"
 	"slices"
 	"strings"
+
+	"github.com/JXSnack/flatmod/modfile"
 )
 
 var Opts []string
@@ -48,4 +50,26 @@ func Vprintf(format string, a ...any) {
 	if slices.Contains(Opts, "v") || slices.Contains(Opts, "-verbose") {
 		fmt.Printf(format, a...)
 	}
+}
+
+func GetMod(command string) *modfile.File {
+	path := ""
+	if len(os.Args) > 2 {
+		path = os.Args[2]
+	}
+
+	file, err := modfile.Find(path)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s: %v", command, err)
+		return nil
+	}
+
+	Vprintf("using %s\n", file.Path)
+
+	if ok, problems := file.CheckValidity(); !ok {
+		fmt.Fprintln(os.Stderr, strings.Join(problems, "\n"))
+		return nil
+	}
+
+	return file
 }
