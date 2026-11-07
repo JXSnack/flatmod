@@ -4,9 +4,19 @@ import (
 	"fmt"
 	"os"
 	"slices"
+	"strings"
 )
 
+var Opts []string
+
 func main() {
+	for i, arg := range os.Args {
+		if strings.HasPrefix(arg, "-") {
+			Opts = append(Opts, strings.TrimPrefix(arg, "-"))
+			os.Args = append(os.Args[:i], os.Args[i+1:]...)
+		}
+	}
+
 	if len(os.Args) == 1 {
 		fmt.Println("fmod is used for managing Flatmod source code.")
 		fmt.Println()
@@ -29,13 +39,13 @@ func main() {
 }
 
 func Vprintln(a ...any) {
-	if slices.Contains(os.Args, "-v") {
+	if slices.Contains(Opts, "v") || slices.Contains(Opts, "-verbose") {
 		fmt.Println(a...)
 	}
 }
 
 func Vprintf(format string, a ...any) {
-	if slices.Contains(os.Args, "-v") {
+	if slices.Contains(Opts, "v") || slices.Contains(Opts, "-verbose") {
 		fmt.Printf(format, a...)
 	}
 }
