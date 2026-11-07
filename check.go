@@ -21,9 +21,9 @@ func Check() {
 				return nil
 			}
 
-			if strings.HasSuffix(candidate, ".mod") {
+			if strings.HasSuffix(candidate, ".fmod") {
 				if path != "" {
-					return fmt.Errorf("check: multiple .mod files found")
+					return fmt.Errorf("check: multiple .fmod files found")
 				}
 
 				path = candidate
@@ -40,11 +40,11 @@ func Check() {
 	}
 
 	if path == "" {
-		log.Fatal("check: no .mod file found in the current directory")
+		log.Fatal("check: no .fmod file found in the current directory")
 	}
 
-	if !strings.HasSuffix(path, ".mod") {
-		log.Fatal("check: invalid path, must end with .mod")
+	if !strings.HasSuffix(path, ".fmod") {
+		log.Fatal("check: invalid path, must end with .fmod")
 	}
 
 	data, err := os.ReadFile(path)
