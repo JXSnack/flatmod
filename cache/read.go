@@ -24,13 +24,14 @@ func Read(path string, checksum [16]byte, get func() ([]byte, error)) ([]byte, e
 	}
 
 	// check if cached
-	if _, err := os.Stat(path); err == nil {
+	diskPath := filepath.Join(FileDir, path)
+	if _, err := os.Stat(diskPath); err == nil {
 		// check checksum
 		cachedSum, err := GetChecksum(path)
 		if err == nil {
 			if cachedSum == checksum {
 				// read from cache
-				data, err := os.ReadFile(path)
+				data, err := os.ReadFile(diskPath)
 				if err == nil {
 					return data, nil
 				}
