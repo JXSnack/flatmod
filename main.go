@@ -24,6 +24,7 @@ func main() {
 		fmt.Println()
 		fmt.Println("All commands:")
 		fmt.Println("\tcheck\tread configuration files for errors")
+		fmt.Println("\tclean\tremove cached files")
 		fmt.Println("\tidea\tupdate IntelliJ configuration")
 		fmt.Println("\ttidy\tensure .fmod matches source code")
 		return
@@ -32,6 +33,8 @@ func main() {
 	switch os.Args[1] {
 	case "check":
 		Check()
+	case "clean":
+		Clean()
 	case "idea":
 		Idea()
 	case "tidy":
