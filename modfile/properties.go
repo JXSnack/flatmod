@@ -2,12 +2,24 @@ package modfile
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"strings"
+
+	"github.com/JXSnack/flatmod/helper"
 )
 
 func FillProperties(file *File, text string) string {
+	wd, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+
 	text = strings.ReplaceAll(text, "%flatmod:maven%", formatMavens(file, "    "))
 	text = strings.ReplaceAll(text, "%flatmod:dependencies%", formatDependencies(file, "    "))
+	text = strings.ReplaceAll(text, "%flatmod:root%", filepath.Base(wd))
+	text = strings.ReplaceAll(text, "%flatmod:rootid%", helper.ReValidId.ReplaceAllString(filepath.Base(wd), "_"))
+	text = strings.ReplaceAll(text, "%flatmod:group%", file.Group)
 	return text
 }
 
