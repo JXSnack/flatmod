@@ -10,6 +10,7 @@ import (
 type Vendor interface {
 	Identifier() string
 	DownloadJar(link string, version version.Version) []byte
+	FormatGradle(link string) string
 }
 
 // ParseLink takes a dependency and returns the dependency's vendor and link.

@@ -11,3 +11,7 @@ func (g Git) Identifier() string {
 func (g Git) DownloadJar(link string, version version.Version) []byte {
 	return make([]byte, 0)
 }
+
+func (g Git) FormatGradle(link string) string {
+	panic("git dependency format is not implemented")
+}
