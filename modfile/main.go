@@ -7,7 +7,6 @@ import (
 	"github.com/JXSnack/flatmod/dependency"
 )
 
-// TODO: multiple src directories
 // TODO: multiple resource directories
 
 type File struct {
@@ -20,9 +19,10 @@ type File struct {
 	Mavens       []string
 }
 
-func Read(data []byte, path string) (*File, error) {
+func Read(data []byte, path string) (*File, []error) {
 	file := &File{Path: path}
 	lines := strings.Split(string(data), "\n")
+	errs := make([]error, 0)
 
 	for i, line := range lines {
 		line = strings.TrimSpace(line)
@@ -34,11 +34,13 @@ func Read(data []byte, path string) (*File, error) {
 		}
 
 		if len(instruction) == 1 {
-			return nil, wrapErr(path, i+1, fmt.Errorf("unfinished instruction"))
+			errs = append(errs, wrapErr(path, i+1, fmt.Errorf("unfinished instruction")))
+			continue
 		}
 
 		body := strings.SplitN(instruction[1], "//", 2)[0]
-		if strings.TrimSpace(body) == "" {
+		body = strings.TrimSpace(body)
+		if body == "" {
 			continue
 		}
 
@@ -53,15 +55,17 @@ func Read(data []byte, path string) (*File, error) {
 		case "require":
 			err = applyRequireInstruction(file, body)
 		default:
-			return nil, wrapErr(path, i+1, fmt.Errorf("unknown statement: %s", name))
+			errs = append(errs, fmt.Errorf("unknown statement: %s", name))
+			continue
 		}
 
 		if err != nil {
-			return nil, wrapErr(path, i+1, err)
+			errs = append(errs, wrapErr(path, i+1, err))
+			continue
 		}
 	}
 
-	return file, nil
+	return file, errs
 }
 
 func wrapErr(path string, line int, err error) error {

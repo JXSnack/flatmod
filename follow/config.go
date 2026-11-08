@@ -29,6 +29,17 @@ func ApplyConfigToFile(c Config, file *modfile.File) error {
 			return err
 		}
 
+		skip := false
+		for i, installed := range file.Dependencies {
+			if installed.Link == dep.Link {
+				skip = true
+				file.Dependencies[i].Indirect = true
+			}
+		}
+		if skip {
+			continue
+		}
+
 		dep.Indirect = true
 		file.Dependencies = append(file.Dependencies, dep)
 	}

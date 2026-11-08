@@ -53,7 +53,7 @@ func GetMod(command string) *modfile.File {
 
 	file, err := modfile.Find(path)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %v", command, err)
+		fmt.Fprintf(os.Stderr, "%v", err)
 		return nil
 	}
 

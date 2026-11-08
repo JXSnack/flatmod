@@ -54,5 +54,11 @@ func Find(path string) (*File, error) {
 		return nil, err
 	}
 
-	return Read(data, path)
+	file, errs := Read(data, path)
+	bigErr := make([]string, 0)
+	for _, err = range errs {
+		bigErr = append(bigErr, err.Error())
+	}
+
+	return file, fmt.Errorf(strings.Join(bigErr, "\n"))
 }
