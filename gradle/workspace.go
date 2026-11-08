@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"slices"
 
 	"github.com/JXSnack/flatmod/follow"
 	"github.com/JXSnack/flatmod/modfile"
@@ -44,6 +45,17 @@ func (w *Workspace) Generate() error {
 	err := os.MkdirAll(w.Dir(), 0700)
 	if err != nil {
 		return fmt.Errorf("workspace: %w", err)
+	}
+
+	// clear path
+	entries, err := os.ReadDir(dir)
+	if err != nil {
+		return fmt.Errorf("workspace: %w", err)
+	}
+	for _, entry := range entries {
+		if !slices.Contains(w.Follow.Config.Retain, entry.Name()) {
+			os.RemoveAll(filepath.Join(dir, entry.Name()))
+		}
 	}
 
 	// get zip
@@ -94,7 +106,7 @@ func (w *Workspace) Generate() error {
 	// move files
 	err = moveFiles(w, dir)
 	if err != nil {
-		return err
+		return fmt.Errorf("workspace: %w", err)
 	}
 
 	return nil

@@ -11,6 +11,9 @@ import (
 type Config struct {
 	DuplicateStrategies map[string]string `json:"duplicateStrategies"`
 
+	// Retain-ed files are the only files not deleted on Gradle workspace generation
+	Retain []string `json:"retain"`
+
 	// Indirect dependencies are dependencies that must be loaded
 	Indirect []string `json:"indirect"`
 
