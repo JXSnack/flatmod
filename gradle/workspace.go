@@ -91,5 +91,11 @@ func (w *Workspace) Generate() error {
 		}
 	}
 
+	// move files
+	err = moveFiles(w, dir)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
