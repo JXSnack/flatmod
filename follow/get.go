@@ -33,7 +33,8 @@ func makeGitURL(rawURL string) string {
 	return "git@" + host + ":" + path + ".git"
 }
 
-func Get(url string, branch string) (Config, error) {
+// Get returns the zip content of the followed flatmod repository
+func Get(url string, branch string) ([]byte, error) {
 	// connect
 	nameSum := md5.Sum([]byte(url + branch))
 	name := hex.EncodeToString(nameSum[:])
@@ -46,7 +47,7 @@ func Get(url string, branch string) (Config, error) {
 
 	refs, err := remote.List(&git.ListOptions{})
 	if err != nil {
-		return Config{}, fmt.Errorf("get remote: %w", err)
+		return []byte{}, fmt.Errorf("get remote: %w", err)
 	}
 
 	// get hash
@@ -59,7 +60,7 @@ func Get(url string, branch string) (Config, error) {
 	}
 
 	if hash == "" {
-		return Config{}, fmt.Errorf("branch %s does not exist", branch)
+		return []byte{}, fmt.Errorf("branch %s does not exist", branch)
 	}
 
 	// read repo
@@ -83,6 +84,12 @@ func Get(url string, branch string) (Config, error) {
 
 		return data, nil
 	})
+	return data, err
+}
+
+// GetConfig returns the config of the followed flatmod repository
+func GetConfig(url string, branch string) (Config, error) {
+	data, err := Get(url, branch)
 	if err != nil {
 		return Config{}, err
 	}

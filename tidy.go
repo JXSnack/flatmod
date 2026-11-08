@@ -22,7 +22,7 @@ func Tidy() {
 	}
 
 	// load follow
-	config, err := follow.Get(file.Follow, file.FollowBranch)
+	config, err := follow.GetConfig(file.Follow, file.FollowBranch)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "follow: %v", err)
 		os.Exit(1)
