@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"crypto/md5"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/fs"
@@ -87,16 +88,31 @@ func Get(url string, branch string) (Config, error) {
 	}
 
 	// read fmod.json
-	r, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
+	zr, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
 	if err != nil {
 		return Config{}, err
 	}
 
-	for _, file := range r.File {
-		fmt.Println(fmt.Sprintf("file: %s", file.Name))
+	for _, file := range zr.File {
+		if file.Name == "fmod.json" {
+			r, err := file.Open()
+			if err != nil {
+				return Config{}, err
+			}
+			defer r.Close()
+
+			d := json.NewDecoder(r)
+			var cfg Config
+			err = d.Decode(&cfg)
+			if err != nil {
+				return Config{}, fmt.Errorf("decode fmod.json: %w", err)
+			}
+
+			return cfg, nil
+		}
 	}
 
-	return Config{}, nil
+	return Config{}, fmt.Errorf("follow repository does not contain fmod.json")
 }
 
 func zipPath(dir string) ([]byte, error) {
