@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/JXSnack/flatmod/helper"
 	"github.com/JXSnack/flatmod/version"
 )
 
@@ -20,7 +21,7 @@ func (m Maven) DownloadJar(link string, version version.Version) []byte {
 
 func (m Maven) FormatGradle(link string) string {
 	return fmt.Sprintf(
-		"modImplementation %q:${project.dep_%s}",
-		link, strings.SplitN(link, ":", 2)[1],
+		"modImplementation %q",
+		fmt.Sprintf("%s:${project.dep_%s}", link, helper.ReValidId.ReplaceAllString(strings.SplitN(link, ":", 2)[1], "_")),
 	)
 }
