@@ -2,9 +2,7 @@ package modfile
 
 import (
 	"fmt"
-	"io/fs"
 	"os"
-	"path/filepath"
 	"strings"
 )
 
@@ -24,21 +22,21 @@ func Find(path string) (*File, error) {
 	}
 
 	if stat.IsDir() {
-		err = filepath.WalkDir(path, func(candidate string, d fs.DirEntry, err error) error {
-			if d != nil && d.IsDir() {
-				return nil
+		entries, err := os.ReadDir(path)
+		for _, entry := range entries {
+			if entry != nil && entry.IsDir() {
+				continue
 			}
 
-			if !strings.HasSuffix(candidate, ".fmod") {
-				return nil
+			if !strings.HasSuffix(entry.Name(), ".fmod") {
+				continue
 			}
 
 			if strings.HasSuffix(path, ".fmod") {
-				return fmt.Errorf("multiple .fmod files found")
+				return nil, fmt.Errorf("multiple .fmod files found")
 			}
-			path = candidate
-			return nil
-		})
+			path = entry.Name()
+		}
 
 		if !strings.HasSuffix(path, ".fmod") {
 			err = fmt.Errorf("no .fmod file in current directory")
