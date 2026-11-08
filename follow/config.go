@@ -1,6 +1,7 @@
 package follow
 
 import (
+	"fmt"
 	"slices"
 
 	"github.com/JXSnack/flatmod/dependency"
@@ -29,15 +30,11 @@ func ApplyConfigToFile(c Config, file *modfile.File) error {
 			return err
 		}
 
-		skip := false
-		for i, installed := range file.Dependencies {
+		// no duplicates
+		for _, installed := range file.Dependencies {
 			if installed.Link == dep.Link {
-				skip = true
-				file.Dependencies[i].Indirect = true
+				return fmt.Errorf("dependency %s already defined by follow repository", installed.Link)
 			}
-		}
-		if skip {
-			continue
 		}
 
 		dep.Indirect = true

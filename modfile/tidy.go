@@ -2,8 +2,6 @@ package modfile
 
 import (
 	"strings"
-
-	"github.com/JXSnack/flatmod/dependency"
 )
 
 func (f *File) Tidy() string {
@@ -36,25 +34,14 @@ func (f *File) Tidy() string {
 	if len(f.Dependencies) > 0 {
 		b.WriteString("\n")
 
-		indirects := make([]dependency.Dependency, 0)
 		for _, dep := range f.Dependencies {
 			if dep.Indirect {
-				indirects = append(indirects, dep)
 				continue
 			}
 
 			b.WriteString("require ")
 			b.WriteString(dep.String())
 			b.WriteString("\n")
-		}
-
-		if len(indirects) > 0 {
-			b.WriteString("\n")
-			for _, dep := range indirects {
-				b.WriteString("require ")
-				b.WriteString(dep.String())
-				b.WriteString("\n")
-			}
 		}
 	}
 
