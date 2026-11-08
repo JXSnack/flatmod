@@ -55,6 +55,10 @@ func Find(path string) (*File, error) {
 	}
 
 	file, errs := Read(data, path)
+	if len(errs) == 0 {
+		return file, nil
+	}
+
 	bigErr := make([]string, 0)
 	for _, err = range errs {
 		bigErr = append(bigErr, err.Error())
