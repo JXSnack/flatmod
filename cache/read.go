@@ -22,7 +22,7 @@ import (
 func Read(path string, checksum [16]byte, get func() ([]byte, error)) ([]byte, error) {
 	// skip if cache isn't initialized
 	if InfoDir == "" || FileDir == "" {
-		fmt.Fprintf(os.Stderr, "cache isn't initialized, skipping read for %q", path)
+		fmt.Fprintf(os.Stderr, "cache isn't initialized, skipping read for %q\n", path)
 		return get()
 	}
 
