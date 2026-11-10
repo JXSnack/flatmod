@@ -2,8 +2,8 @@
 
 <h1 align="center">flatmod
 
-<a href="https://wiki.snackbag.net/w/flatmod"><img src="https://img.shields.io/badge/documentation-wiki-blue"></a>
-<a href="https://github.com/JXSnack/flatmod-ij"><img src="https://img.shields.io/badge/intellij_plugin-repo-blue?logo=github"></a>
+<a href="https://wiki.snackbag.net/w/flatmod"><img src="https://img.shields.io/badge/documentation-in_progress-red"></a>
+<a href="https://github.com/JXSnack/flatmod-ij"><img src="https://img.shields.io/badge/intellij_plugin-in_progress-red?logo=github"></a>
 </h1>
 
 > [!IMPORTANT]
