@@ -1,13 +1,20 @@
-<img align="right" width="128px" src=".docs/flatmod.png"/>
+<p align="center"><img width="128px" src=".docs/flatmod.png"/></p>
 
-# flatmod
+<h1 align="center">flatmod
+
+<a href="https://wiki.snackbag.net/w/flatmod"><img src="https://img.shields.io/badge/documentation-wiki-blue"></a>
+<a href="https://github.com/JXSnack/flatmod-ij"><img src="https://img.shields.io/badge/intellij_plugin-repo-blue?logo=github"></a>
+</h1>
+
+> [!IMPORTANT]
+> Flatmod is still under development and undergoing constant breaking changes. Do not use it for 
+> serious projects.
 
 An opinionated reimagination of the Minecraft modding toolchain, to ease coordination of
 multiple developers on small projects and streamline multiloader and -version development. It's
 based on the idea that flat development is less likely to intertwine and easier to maintain.
 
 <img src=".docs/badge.png"/>
-
 
 ## Options
 
