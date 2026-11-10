@@ -7,7 +7,7 @@
 </h1>
 
 > [!IMPORTANT]
-> Flatmod is still under development and undergoing constant breaking changes. Do not use it for 
+> Flatmod is still in development and undergoing constant breaking changes. Do not use it for 
 > serious projects.
 
 An opinionated reimagination of the Minecraft modding toolchain, to ease coordination of
