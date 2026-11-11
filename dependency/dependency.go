@@ -1,6 +1,7 @@
 package dependency
 
 import (
+	"crypto/md5"
 	"fmt"
 	"strings"
 
@@ -34,6 +35,10 @@ func (d Dependency) String() string {
 	}
 
 	return b.String()
+}
+
+func (d Dependency) Hash() [16]byte {
+	return md5.Sum([]byte(d.Link + d.Version.String()))
 }
 
 func Parse(body string) (Dependency, error) {
