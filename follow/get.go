@@ -48,7 +48,7 @@ func Get(url string, branch string) ([]byte, error) {
 
 	hash, err := cache.Read(
 		filepath.Join("follow-lookup", name),
-		md5.Sum([]byte(fmt.Sprintf("%d-%d", time.Now().Hour(), time.Now().Day()))),
+		helper.HourlySum(),
 		func() ([]byte, error) {
 			refs, err := remote.List(&git.ListOptions{})
 			if err != nil {
