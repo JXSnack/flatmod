@@ -56,14 +56,14 @@ func Idea() {
 
 		if err != nil {
 			failed = true
-			fmt.Fprintf(os.Stderr, "download (%s): %s\n", dep.Vendor.Identifier(), dep.Link)
+			fmt.Fprintf(os.Stderr, "download (%s): %v\n", dep.Vendor.Identifier(), err)
 			continue
 		}
 
 		err = os.WriteFile(filepath.Join(downloadPath, filename), jar, 0644)
 		if err != nil {
 			failed = true
-			fmt.Fprintf(os.Stderr, "write (%s): %s\n", dep.Vendor.Identifier(), dep.Link)
+			fmt.Fprintf(os.Stderr, "write (%s): %v\n", dep.Vendor.Identifier(), err)
 			continue
 		}
 	}
