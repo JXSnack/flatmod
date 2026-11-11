@@ -38,7 +38,12 @@ func (d Dependency) FormatFlatmod() string {
 	return b.String()
 }
 
-func (d Dependency) Hash() [16]byte {
+func (d Dependency) Filename() string {
+	return d.Vendor.Filename(d.Link, d.Version)
+}
+
+// NameHash returns a md5 hash of the Link and Version.
+func (d Dependency) NameHash() [16]byte {
 	return md5.Sum([]byte(d.Link + d.Version.String()))
 }
 

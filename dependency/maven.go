@@ -52,3 +52,11 @@ func (m Maven) FormatGradle(link string) string {
 		fmt.Sprintf("%s:${project.dep_%s}", link, helper.ReValidId.ReplaceAllString(strings.SplitN(link, ":", 2)[1], "_")),
 	)
 }
+
+func (m Maven) Filename(link string, version version.Version) string {
+	return fmt.Sprintf(
+		"%s-%s.jar",
+		helper.ReValidId.ReplaceAllString(strings.SplitN(link, ":", 2)[1], "_"),
+		helper.ReValidId.ReplaceAllString(version.String(), "_"),
+	)
+}

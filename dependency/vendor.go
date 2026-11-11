@@ -16,6 +16,7 @@ type Vendor interface {
 	Identifier() string
 	DownloadJar(link string, version version.Version, context DownloadContext) ([]byte, error)
 	FormatGradle(link string) string
+	Filename(link string, version version.Version) string
 }
 
 // ParseLink takes a dependency and returns the dependency's vendor and link.
