@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/hex"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -44,8 +43,7 @@ func Idea() {
 		Repos: file.Mavens,
 	}
 	for _, dep := range file.Dependencies {
-		hash := dep.Hash()
-		filename := hex.EncodeToString(hash[:]) + ".jar"
+		filename := dep.Filename()
 		jar, err := cache.Read(
 			filepath.Join("libraries", filename),
 			helper.ZeroSum(),
