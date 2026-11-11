@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/JXSnack/flatmod/cache"
 	"github.com/JXSnack/flatmod/helper"
@@ -45,26 +46,33 @@ func Get(url string, branch string) ([]byte, error) {
 		URLs: []string{url},
 	})
 
-	refs, err := remote.List(&git.ListOptions{})
-	if err != nil {
-		return []byte{}, fmt.Errorf("get remote: %w", err)
-	}
+	hash, err := cache.Read(
+		filepath.Join("follow-lookup", name),
+		md5.Sum([]byte(fmt.Sprintf("%d-%d", time.Now().Hour(), time.Now().Day()))),
+		func() ([]byte, error) {
+			refs, err := remote.List(&git.ListOptions{})
+			if err != nil {
+				return []byte{}, fmt.Errorf("get remote: %w", err)
+			}
 
-	// get hash
-	hash := ""
-	for _, ref := range refs {
-		if ref.Name().String() == plumbing.NewBranchReferenceName(branch).String() {
-			hash = ref.Hash().String()
-			break
-		}
-	}
+			// get hash
+			hash := ""
+			for _, ref := range refs {
+				if ref.Name().String() == plumbing.NewBranchReferenceName(branch).String() {
+					hash = ref.Hash().String()
+					break
+				}
+			}
 
-	if hash == "" {
-		return []byte{}, fmt.Errorf("branch %s does not exist", branch)
-	}
+			if hash == "" {
+				return []byte{}, fmt.Errorf("branch %s does not exist", branch)
+			}
+			return []byte(hash), nil
+		},
+	)
 
 	// read repo
-	data, err := cache.Read(filepath.Join("follow", name), md5.Sum([]byte(hash)), func() ([]byte, error) {
+	data, err := cache.Read(filepath.Join("follow", name), md5.Sum(hash), func() ([]byte, error) {
 		dir, _ := os.MkdirTemp("", "repo-*")
 		defer os.RemoveAll(dir)
 
