@@ -27,6 +27,9 @@ func Read(data []byte, path string) (*File, []error) {
 
 	for i, line := range lines {
 		line = strings.TrimSpace(line)
+		if strings.HasPrefix(line, "//") {
+			continue
+		}
 
 		instruction := strings.SplitN(line, " ", 2)
 		name := instruction[0]
@@ -39,7 +42,7 @@ func Read(data []byte, path string) (*File, []error) {
 			continue
 		}
 
-		body := strings.SplitN(instruction[1], "//", 2)[0]
+		body := strings.SplitN(instruction[1], " //", 2)[0]
 		body = strings.TrimSpace(body)
 		if body == "" {
 			continue
