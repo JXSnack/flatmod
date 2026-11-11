@@ -27,6 +27,11 @@ func formatMavens(file *File, prefix string) string {
 	b := strings.Builder{}
 
 	for _, maven := range file.Mavens {
+		if maven.Indirect {
+			fmt.Printf("skipped indirect %s\n", maven.Link)
+			continue
+		}
+
 		b.WriteString(prefix)
 		b.WriteString("maven { url = ")
 		b.WriteString(fmt.Sprintf("%q", maven.Link))
