@@ -9,6 +9,11 @@ import (
 )
 
 func Idea() {
+	if _, err := os.Stat(".idea"); err != nil {
+		fmt.Fprintf(os.Stderr, "idea: no .idea directory found")
+		os.Exit(1)
+	}
+
 	file := GetMod("idea")
 	if file == nil {
 		os.Exit(1)
