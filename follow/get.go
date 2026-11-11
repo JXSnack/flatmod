@@ -73,6 +73,8 @@ func Get(url string, branch string) ([]byte, error) {
 
 	// read repo
 	data, err := cache.Read(filepath.Join("follow", name), md5.Sum(hash), func() ([]byte, error) {
+		fmt.Printf("flatmod: downloading %q\n", url)
+
 		dir, _ := os.MkdirTemp("", "repo-*")
 		defer os.RemoveAll(dir)
 
