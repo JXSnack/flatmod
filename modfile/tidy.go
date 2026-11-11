@@ -24,8 +24,12 @@ func (f *File) Tidy() string {
 		b.WriteString("\n")
 
 		for _, maven := range f.Mavens {
+			if maven.Indirect {
+				continue
+			}
+
 			b.WriteString("maven ")
-			b.WriteString(maven)
+			b.WriteString(maven.Link)
 			b.WriteString("\n")
 		}
 	}

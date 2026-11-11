@@ -29,7 +29,7 @@ func formatMavens(file *File, prefix string) string {
 	for _, maven := range file.Mavens {
 		b.WriteString(prefix)
 		b.WriteString("maven { url = ")
-		b.WriteString(fmt.Sprintf("%q", maven))
+		b.WriteString(fmt.Sprintf("%q", maven.Link))
 		b.WriteString(" }\n")
 	}
 

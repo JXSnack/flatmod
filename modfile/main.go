@@ -16,7 +16,7 @@ type File struct {
 	Follow       string
 	FollowBranch string
 	Dependencies []dependency.Dependency
-	Mavens       []string
+	Mavens       []dependency.MavenRepo
 }
 
 func Read(data []byte, path string) (*File, []error) {
