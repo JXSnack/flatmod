@@ -18,7 +18,8 @@ type Dependency struct {
 	OmitVendor bool
 }
 
-func (d Dependency) String() string {
+// FormatFlatmod returns a string in the format of a .fmod dependency
+func (d Dependency) FormatFlatmod() string {
 	b := strings.Builder{}
 
 	if !d.OmitVendor {

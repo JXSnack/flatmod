@@ -44,7 +44,7 @@ func (f *File) Tidy() string {
 			}
 
 			b.WriteString("require ")
-			b.WriteString(dep.String())
+			b.WriteString(dep.FormatFlatmod())
 			b.WriteString("\n")
 		}
 	}
