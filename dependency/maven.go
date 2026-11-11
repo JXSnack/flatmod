@@ -15,7 +15,7 @@ func (m Maven) Identifier() string {
 	return "maven"
 }
 
-func (m Maven) DownloadJar(link string, version version.Version) []byte {
+func (m Maven) DownloadJar(link string, version version.Version, context DownloadContext) []byte {
 	return make([]byte, 0)
 }
 

@@ -1,6 +1,8 @@
 package dependency
 
-import "github.com/JXSnack/flatmod/version"
+import (
+	"github.com/JXSnack/flatmod/version"
+)
 
 type Git struct{}
 
@@ -8,7 +10,7 @@ func (g Git) Identifier() string {
 	return "git"
 }
 
-func (g Git) DownloadJar(link string, version version.Version) []byte {
+func (g Git) DownloadJar(link string, version version.Version, context DownloadContext) []byte {
 	return make([]byte, 0)
 }
 

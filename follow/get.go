@@ -12,7 +12,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/JXSnack/flatmod/cache"
 	"github.com/JXSnack/flatmod/helper"
