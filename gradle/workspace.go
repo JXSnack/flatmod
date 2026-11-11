@@ -10,6 +10,7 @@ import (
 	"slices"
 
 	"github.com/JXSnack/flatmod/follow"
+	"github.com/JXSnack/flatmod/helper"
 	"github.com/JXSnack/flatmod/modfile"
 )
 
@@ -39,6 +40,7 @@ func (w *Workspace) Dir() string {
 }
 
 func (w *Workspace) Generate() error {
+	helper.Vprintln("gradle: generating workspace")
 	dir := w.Dir()
 
 	// make directory
