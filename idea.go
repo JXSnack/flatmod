@@ -50,6 +50,7 @@ func Idea() {
 			filepath.Join("libraries", filename),
 			helper.ZeroSum(),
 			func() ([]byte, error) {
+				fmt.Printf("flatmod: downloading %s (%s)\n", dep.Link, dep.Version)
 				return dep.Vendor.DownloadJar(dep.Link, dep.Version, ctx)
 			},
 		)
