@@ -5,6 +5,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/JXSnack/flatmod/cache"
+	"github.com/JXSnack/flatmod/follow"
 	"github.com/JXSnack/flatmod/helper"
 	"github.com/JXSnack/flatmod/modfile"
 )
@@ -46,6 +48,7 @@ func main() {
 }
 
 func GetMod(command string) *modfile.File {
+	// load .fmod
 	path := ""
 	if len(os.Args) > 2 {
 		path = os.Args[2]
@@ -62,6 +65,25 @@ func GetMod(command string) *modfile.File {
 	if ok, problems := file.CheckValidity(); !ok {
 		fmt.Fprintln(os.Stderr, strings.Join(problems, "\n"))
 		return nil
+	}
+
+	// init cache
+	if err := cache.Init(); err != nil {
+		fmt.Fprintf(os.Stderr, "%v", err)
+		os.Exit(1)
+	}
+
+	// load follow
+	config, err := follow.GetConfig(file.Follow, file.FollowBranch)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s: %v", command, err)
+		os.Exit(1)
+	}
+
+	err = follow.ApplyConfigToFile(config, file)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s: %v", command, err)
+		os.Exit(1)
 	}
 
 	return file

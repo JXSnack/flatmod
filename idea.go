@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/JXSnack/flatmod/cache"
 	"github.com/JXSnack/flatmod/gradle"
 )
 
@@ -19,12 +18,7 @@ func Idea() {
 		os.Exit(1)
 	}
 
-	// init cache
-	if err := cache.Init(); err != nil {
-		fmt.Fprintf(os.Stderr, "%v", err)
-		os.Exit(1)
-	}
-
+	// generate workspace
 	workspace, err := gradle.NewWorkspace(file)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s", err)
