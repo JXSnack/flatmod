@@ -2,7 +2,6 @@ package follow
 
 import (
 	"fmt"
-	"slices"
 
 	"github.com/JXSnack/flatmod/dependency"
 	"github.com/JXSnack/flatmod/modfile"
@@ -14,20 +13,20 @@ type Config struct {
 	// Retain-ed files are the only files not deleted on Gradle workspace generation
 	Retain []string `json:"retain"`
 
-	// Indirect dependencies are dependencies that must be loaded
-	Indirect []string `json:"indirect"`
+	// Indirect dependencies are always loaded but never shown in the configuration
+	Indirect Dependencies `json:"indirect"`
 
-	// Require-d dependencies exist for initial project creation, but
-	// are not enforced
+	// Init dependencies are used on flatmod project init and never regenerated
+	Init Dependencies `json:"init"`
+}
+
+type Dependencies struct {
+	Maven   []string `json:"maven"`
 	Require []string `json:"require"`
-
-	// Maven contains a list of repositories for initial project creation,
-	// but are not enforced
-	Maven []string `json:"maven"`
 }
 
 func ApplyConfigToFile(c Config, file *modfile.File) error {
-	for _, indirect := range c.Indirect {
+	for _, indirect := range c.Indirect.Require {
 		dep, err := dependency.Parse(indirect)
 		if err != nil {
 			return err
@@ -44,12 +43,18 @@ func ApplyConfigToFile(c Config, file *modfile.File) error {
 		file.Dependencies = append(file.Dependencies, dep)
 	}
 
-	for _, maven := range c.Maven {
-		if slices.Contains(file.Mavens, maven) {
-			continue
+	for _, maven := range c.Indirect.Maven {
+		repo := dependency.MavenRepo{Link: maven}
+
+		// no duplicates
+		for _, installed := range file.Mavens {
+			if installed.Link == repo.Link {
+				return fmt.Errorf("maven repository %s already defined by follow repository", installed.Link)
+			}
 		}
 
-		file.Mavens = append(file.Mavens, maven)
+		repo.Indirect = true
+		file.Mavens = append(file.Mavens, repo)
 	}
 
 	return nil
