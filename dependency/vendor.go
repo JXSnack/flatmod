@@ -14,7 +14,7 @@ type DownloadContext struct {
 
 type Vendor interface {
 	Identifier() string
-	DownloadJar(link string, version version.Version, context DownloadContext) []byte
+	DownloadJar(link string, version version.Version, context DownloadContext) ([]byte, error)
 	FormatGradle(link string) string
 }
 
