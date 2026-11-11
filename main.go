@@ -57,7 +57,7 @@ func GetMod(command string) *modfile.File {
 		return nil
 	}
 
-	helper.Vprintf("using %s\n", file.Path)
+	helper.Vprintf("flatmod: using %s\n", file.Path)
 
 	if ok, problems := file.CheckValidity(); !ok {
 		fmt.Fprintln(os.Stderr, strings.Join(problems, "\n"))
