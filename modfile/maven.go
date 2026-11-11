@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/JXSnack/flatmod/dependency"
+	"github.com/JXSnack/flatmod/maven"
 )
 
 func applyMavenInstruction(file *File, body string) error {
@@ -13,13 +13,13 @@ func applyMavenInstruction(file *File, body string) error {
 		return fmt.Errorf("invalid maven url: %w", err)
 	}
 
-	maven := u.String()
+	url := u.String()
 	for _, repo := range file.Mavens {
-		if repo.Link == maven {
-			return fmt.Errorf("maven repository defined twice: %q", maven)
+		if repo.Link == url {
+			return fmt.Errorf("maven repository defined twice: %q", url)
 		}
 	}
 
-	file.Mavens = append(file.Mavens, dependency.MavenRepo{Link: maven, Indirect: false})
+	file.Mavens = append(file.Mavens, maven.Repo{Link: url, Indirect: false})
 	return nil
 }

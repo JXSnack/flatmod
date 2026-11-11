@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/JXSnack/flatmod/dependency"
+	"github.com/JXSnack/flatmod/maven"
 	"github.com/JXSnack/flatmod/modfile"
 )
 
@@ -43,8 +44,8 @@ func ApplyConfigToFile(c Config, file *modfile.File) error {
 		file.Dependencies = append(file.Dependencies, dep)
 	}
 
-	for _, maven := range c.Indirect.Maven {
-		repo := dependency.MavenRepo{Link: maven}
+	for _, link := range c.Indirect.Maven {
+		repo := maven.Repo{Link: link}
 
 		// no duplicates
 		for _, installed := range file.Mavens {

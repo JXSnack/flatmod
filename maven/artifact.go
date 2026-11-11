@@ -1,4 +1,4 @@
-package gradle
+package maven
 
 import (
 	"fmt"

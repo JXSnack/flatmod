@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/JXSnack/flatmod/dependency"
+	"github.com/JXSnack/flatmod/maven"
 )
 
 // TODO: multiple resource directories
@@ -16,7 +17,7 @@ type File struct {
 	Follow       string
 	FollowBranch string
 	Dependencies []dependency.Dependency
-	Mavens       []dependency.MavenRepo
+	Mavens       []maven.Repo
 }
 
 func Read(data []byte, path string) (*File, []error) {
