@@ -54,7 +54,7 @@ func Find(path string) (*File, error) {
 
 	file, errs := Read(data, path)
 	if len(errs) == 0 {
-		return &File{}, nil
+		return file, nil
 	}
 
 	bigErr := make([]string, 0)
@@ -62,5 +62,5 @@ func Find(path string) (*File, error) {
 		bigErr = append(bigErr, err.Error())
 	}
 
-	return file, fmt.Errorf(strings.Join(bigErr, "\n"))
+	return &File{}, fmt.Errorf(strings.Join(bigErr, "\n"))
 }
