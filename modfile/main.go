@@ -11,6 +11,7 @@ import (
 // TODO: multiple resource directories
 
 type File struct {
+	// Path is the (relative) path to the file
 	Path string
 
 	Group        string
