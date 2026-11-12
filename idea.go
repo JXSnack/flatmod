@@ -7,6 +7,7 @@ import (
 
 	"github.com/JXSnack/flatmod/dependency"
 	"github.com/JXSnack/flatmod/gradle"
+	"github.com/JXSnack/flatmod/idea"
 )
 
 func Idea() {
@@ -52,4 +53,5 @@ func Idea() {
 		os.Exit(1)
 	}
 
+	fmt.Println(idea.GetIML())
 }
