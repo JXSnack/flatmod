@@ -69,6 +69,9 @@ func Get(url string, branch string) ([]byte, error) {
 			return []byte(hash), nil
 		},
 	)
+	if err != nil {
+		return []byte{}, err
+	}
 
 	// read repo
 	data, err := cache.Read(filepath.Join("follow", name), md5.Sum(hash), func() ([]byte, error) {
@@ -79,7 +82,11 @@ func Get(url string, branch string) ([]byte, error) {
 
 		// clone
 		helper.Vprintf("follow: cloning %s:%s\n", url, branch)
-		_, err = git.PlainClone(dir, false, &git.CloneOptions{URL: url})
+		_, err = git.PlainClone(dir, false, &git.CloneOptions{
+			URL:           url,
+			ReferenceName: plumbing.NewBranchReferenceName(branch),
+			SingleBranch:  true,
+		})
 		if err != nil {
 			return []byte{}, fmt.Errorf("failed to clone: %w", err)
 		}
