@@ -38,6 +38,7 @@ func (d Dependency) FormatFlatmod() string {
 	return b.String()
 }
 
+// Filename returns a filename for the dependency without any extension
 func (d Dependency) Filename() string {
 	return d.Vendor.Filename(d.Link, d.Version)
 }

@@ -55,7 +55,7 @@ func (m Maven) FormatGradle(link string) string {
 
 func (m Maven) Filename(link string, version version.Version) string {
 	return fmt.Sprintf(
-		"%s-%s.jar",
+		"%s-%s",
 		helper.ReValidId.ReplaceAllString(strings.SplitN(link, ":", 2)[1], "_"),
 		helper.ReValidId.ReplaceAllString(version.String(), "_"),
 	)

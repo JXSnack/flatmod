@@ -14,7 +14,7 @@ func DownloadLib(dep dependency.Dependency, ctx dependency.DownloadContext) erro
 	path := filepath.Join(helper.PathMain(), "libraries")
 	os.MkdirAll(path, 0700)
 
-	filename := dep.Filename()
+	filename := dep.Filename() + ".jar"
 	jar, err := cache.Read(
 		filepath.Join("libraries", filename),
 		helper.ZeroSum(),
