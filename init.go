@@ -63,4 +63,24 @@ func Init() {
 		fmt.Fprintf(os.Stderr, "init: %v\n", err)
 		os.Exit(1)
 	}
+
+	// make resource directory
+	os.Mkdir("resources", 0700)
+
+	// extract
+	for cp, target := range cfg.Extract {
+		data, err := follow.GetFile(file.Follow, file.FollowBranch, cp)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "flatmod: %v", err)
+			continue
+		}
+
+		target = modfile.FillProperties(file, target)
+		data = []byte(modfile.FillProperties(file, string(data)))
+		err = os.WriteFile(target, data, 0644)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "flatmod: %v", err)
+			continue
+		}
+	}
 }
