@@ -58,7 +58,6 @@ func appendFacetManager(module *etree.Element, platform string) {
 	appendElement(autoDetectTypes, "platformType", "MCP")
 	appendElement(autoDetectTypes, "platformType", platform)
 	appendElement(autoDetectTypes, "platformType", "MIXIN")
-	appendElement(conf, "projectReimportVersion", "1")
 }
 
 func appendElement(parent *etree.Element, tag string, inner string) *etree.Element {
