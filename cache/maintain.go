@@ -13,18 +13,13 @@ var InfoDir = ""
 
 // Init ensures all cache-related directories are loaded
 func Init() error {
-	home, err := os.UserHomeDir()
-	if err != nil {
+	FileDir = filepath.Join(helper.PathMain(), "cache")
+	if err := os.MkdirAll(FileDir, 0700); err != nil {
 		return fmt.Errorf("cache: %w", err)
 	}
 
-	FileDir = filepath.Join(home, ".flatmod", "cache")
-	if err = os.MkdirAll(FileDir, 0700); err != nil {
-		return fmt.Errorf("cache: %w", err)
-	}
-
-	InfoDir = filepath.Join(home, ".flatmod", "cache-info")
-	if err = os.MkdirAll(InfoDir, 0700); err != nil {
+	InfoDir = filepath.Join(helper.PathMain(), "cache-info")
+	if err := os.MkdirAll(InfoDir, 0700); err != nil {
 		return fmt.Errorf("cache: %w", err)
 	}
 
