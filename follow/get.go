@@ -103,39 +103,54 @@ func Get(url string, branch string) ([]byte, error) {
 	return data, err
 }
 
-// GetConfig returns the config of the followed flatmod repository
-func GetConfig(url string, branch string) (Config, error) {
+// GetFile returns a file from a given repository. The path should be in slash
+// format, because it is automatically converted.
+func GetFile(url string, branch string, path string) ([]byte, error) {
 	data, err := Get(url, branch)
 	if err != nil {
-		return Config{}, err
+		return []byte{}, err
 	}
 
-	// read fmod.json
+	// read path
 	zr, err := zip.NewReader(bytes.NewReader(data), int64(len(data)))
 	if err != nil {
-		return Config{}, err
+		return []byte{}, err
 	}
 
 	for _, file := range zr.File {
-		if file.Name == "fmod.json" {
+		if file.Name == filepath.FromSlash(path) {
 			r, err := file.Open()
 			if err != nil {
-				return Config{}, err
+				return []byte{}, err
 			}
 			defer r.Close()
 
-			d := json.NewDecoder(r)
-			var cfg Config
-			err = d.Decode(&cfg)
+			d, err := io.ReadAll(r)
 			if err != nil {
-				return Config{}, fmt.Errorf("decode fmod.json: %w", err)
+				return []byte{}, fmt.Errorf("read %q: %w", path, err)
 			}
 
-			return cfg, nil
+			return d, nil
 		}
 	}
 
-	return Config{}, fmt.Errorf("follow repository does not contain fmod.json")
+	return []byte{}, fmt.Errorf("follow repository does not contain %q", path)
+}
+
+// GetConfig returns the config of a given repository
+func GetConfig(url string, branch string) (Config, error) {
+	data, err := GetFile(url, branch, "fmod.json")
+	if err != nil {
+		return Config{}, err
+	}
+
+	var cfg Config
+	err = json.Unmarshal(data, &cfg)
+	if err != nil {
+		return Config{}, fmt.Errorf("decode fmod.json: %w", err)
+	}
+
+	return cfg, nil
 }
 
 func zipPath(dir string) ([]byte, error) {
