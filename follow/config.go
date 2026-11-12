@@ -12,6 +12,10 @@ import (
 type Config struct {
 	DuplicateStrategies map[string]string `json:"duplicateStrategies"`
 
+	// FacetPlatform is the value used by the Minecraft development plugin to detect
+	// what mod loader you're using.
+	FacetPlatform string `json:"facetPlatform"`
+
 	// Retain-ed files are the only files not deleted on Gradle workspace generation
 	Retain []string `json:"retain"`
 
