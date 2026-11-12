@@ -16,20 +16,8 @@ func Idea() {
 		os.Exit(1)
 	}
 
-	file := GetMod("idea")
+	file, cfg := GetMod("idea")
 	if file == nil {
-		os.Exit(1)
-	}
-
-	// generate workspace
-	workspace, err := gradle.NewWorkspace(file)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s", err)
-		os.Exit(1)
-	}
-
-	if err = workspace.Generate(); err != nil {
-		fmt.Fprintf(os.Stderr, "%s", err)
 		os.Exit(1)
 	}
 
@@ -42,7 +30,7 @@ func Idea() {
 		Repos: file.Mavens,
 	}
 	for _, dep := range file.Dependencies {
-		err = gradle.DownloadLib(dep, ctx)
+		err := gradle.DownloadLib(dep, ctx)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "download (%s): %v\n", dep.Vendor.Identifier(), err)
 			failed = true

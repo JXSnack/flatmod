@@ -6,7 +6,7 @@ import (
 )
 
 func Tidy() {
-	file := GetMod("tidy")
+	file, _ := GetMod("tidy")
 	if file == nil {
 		os.Exit(1)
 	}

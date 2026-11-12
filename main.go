@@ -50,7 +50,7 @@ func main() {
 	}
 }
 
-func GetMod(command string) *modfile.File {
+func GetMod(command string) (*modfile.File, follow.Config) {
 	// load .fmod
 	path := ""
 	if len(os.Args) > 2 {
@@ -60,14 +60,14 @@ func GetMod(command string) *modfile.File {
 	file, err := modfile.Find(path)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%v", err)
-		return nil
+		return nil, follow.Config{}
 	}
 
 	helper.Vprintf("flatmod: using %s\n", file.Path)
 
 	if ok, problems := file.CheckValidity(); !ok {
 		fmt.Fprintln(os.Stderr, strings.Join(problems, "\n"))
-		return nil
+		return nil, follow.Config{}
 	}
 
 	// init cache
@@ -89,5 +89,5 @@ func GetMod(command string) *modfile.File {
 		os.Exit(1)
 	}
 
-	return file
+	return file, config
 }

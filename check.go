@@ -5,7 +5,7 @@ import (
 )
 
 func Check() {
-	file := GetMod("check")
+	file, _ := GetMod("check")
 	if file == nil {
 		os.Exit(1)
 	}
