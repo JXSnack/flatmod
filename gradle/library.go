@@ -2,7 +2,6 @@ package gradle
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 
 	"github.com/JXSnack/flatmod/cache"
@@ -10,10 +9,7 @@ import (
 	"github.com/JXSnack/flatmod/helper"
 )
 
-func DownloadLib(dep dependency.Dependency, ctx dependency.DownloadContext) error {
-	path := filepath.Join(helper.PathMain(), "libraries")
-	os.MkdirAll(path, 0700)
-
+func DownloadLib(dep dependency.Dependency, ctx dependency.DownloadContext) ([]byte, error) {
 	filename := dep.Filename() + ".jar"
 	jar, err := cache.Read(
 		filepath.Join("libraries", filename),
@@ -25,12 +21,7 @@ func DownloadLib(dep dependency.Dependency, ctx dependency.DownloadContext) erro
 	)
 
 	if err != nil {
-		return err
+		return jar, err
 	}
-
-	err = os.WriteFile(filepath.Join(path, filename), jar, 0644)
-	if err != nil {
-		return err
-	}
-	return nil
+	return jar, nil
 }
