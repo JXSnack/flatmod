@@ -42,17 +42,27 @@ func Idea() {
 	}
 
 	// generate IML
-	if idea.GetIML() == "" {
-		doc := idea.MakeIML(
-			cfg.FacetPlatform,
-			file.Group,
-			[]string{},
-		)
-		doc.Indent(2)
-		err := doc.WriteToFile(filepath.Join(".idea", "flatmod-project.iml"))
+	doc := idea.MakeIML(
+		cfg.FacetPlatform,
+		file.Group,
+		file.Dependencies,
+	)
+	doc.Indent(2)
+	err := doc.WriteToFile(filepath.Join(".idea", "flatmod-project.iml"))
 
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "flatmod: failed to create IML file: %v\n", err)
+		os.Exit(1)
+	}
+
+	// generate libraries
+	for _, dep := range file.Dependencies {
+		doc := idea.MakeLibrary(dep.Filename(), make([]string, 0))
+		doc.Indent(2)
+
+		err := doc.WriteToFile(filepath.Join(".idea", "libraries", dep.Filename()+".xml"))
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "flatmod: failed to create IML file: %v\n", err)
+			fmt.Fprintf(os.Stderr, "flatmod: %v\n", err)
 			os.Exit(1)
 		}
 	}

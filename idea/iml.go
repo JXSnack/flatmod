@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/JXSnack/flatmod/dependency"
 	"github.com/beevik/etree"
 )
 
@@ -24,7 +25,7 @@ func GetIML() string {
 	return iml
 }
 
-func MakeIML(platform string, group string, libraries []string) *etree.Document {
+func MakeIML(platform string, group string, dependencies []dependency.Dependency) *etree.Document {
 	doc := etree.NewDocument()
 	doc.CreateProcInst("xml", `version="1.0" encoding="UTF-8"`)
 
@@ -40,7 +41,7 @@ func MakeIML(platform string, group string, libraries []string) *etree.Document 
 	// module root, directory highlighting & libraries
 	nmrm := appendNMRM(module)
 	appendModuleContent(nmrm, group)
-	appendLibraries(nmrm, libraries)
+	appendLibraries(nmrm, dependencies)
 
 	return doc
 }
@@ -107,11 +108,11 @@ func appendModuleContent(nmrm *etree.Element, group string) {
 	dotIdea.CreateAttr("url", "file://$MODULE_DIR$/.idea")
 }
 
-func appendLibraries(nmrm *etree.Element, libraries []string) {
+func appendLibraries(nmrm *etree.Element, libraries []dependency.Dependency) {
 	for _, lib := range libraries {
 		e := nmrm.CreateElement("orderEntry")
 		e.CreateAttr("type", "library")
-		e.CreateAttr("name", lib)
+		e.CreateAttr("name", lib.Filename())
 		e.CreateAttr("level", "project")
 	}
 }
