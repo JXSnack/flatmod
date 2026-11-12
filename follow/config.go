@@ -2,6 +2,7 @@ package follow
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/JXSnack/flatmod/dependency"
 	"github.com/JXSnack/flatmod/maven"
@@ -14,6 +15,11 @@ type Config struct {
 	// Retain-ed files are the only files not deleted on Gradle workspace generation
 	Retain []string `json:"retain"`
 
+	// Extract-ed files are files extracted from the repository on project creation.
+	// They are also removed when generating the Gradle workspace. File paths may include
+	// flatmod properties.
+	Extract map[string]string `json:"extract"`
+
 	// Indirect dependencies are always loaded but never shown in the configuration
 	Indirect Dependencies `json:"indirect"`
 
@@ -24,6 +30,15 @@ type Config struct {
 type Dependencies struct {
 	Maven   []string `json:"maven"`
 	Require []string `json:"require"`
+}
+
+func (c Config) IsExtracted(path string) bool {
+	for extracted, _ := range c.Extract {
+		if path == filepath.FromSlash(extracted) {
+			return true
+		}
+	}
+	return false
 }
 
 func ApplyConfigToFile(c Config, file *modfile.File) error {

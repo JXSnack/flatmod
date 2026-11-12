@@ -73,6 +73,10 @@ func (w *Workspace) Generate() error {
 
 	// unpack zip
 	for _, zf := range zr.File {
+		if w.Follow.Config.IsExtracted(zf.Name) {
+			continue
+		}
+
 		r, err := zf.Open()
 		if err != nil {
 			return fmt.Errorf("workspace: %w", err)
