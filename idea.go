@@ -41,6 +41,7 @@ func Idea() {
 		os.Exit(1)
 	}
 
+	// generate IML
 	if idea.GetIML() == "" {
 		doc := idea.MakeIML(
 			cfg.FacetPlatform,
