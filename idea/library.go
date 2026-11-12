@@ -3,10 +3,11 @@ package idea
 import (
 	"fmt"
 
+	"github.com/JXSnack/flatmod/dependency"
 	"github.com/beevik/etree"
 )
 
-func MakeLibrary(name string, nested []string) *etree.Document {
+func MakeLibrary(name string, nested []dependency.Dependency) *etree.Document {
 	doc := etree.NewDocument()
 	doc.CreateProcInst("xml", `version="1.0" encoding="UTF-8"`)
 
@@ -22,7 +23,7 @@ func MakeLibrary(name string, nested []string) *etree.Document {
 
 	appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s.jar!/", name))
 	for _, nest := range nested {
-		appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s-nested/%s.jar!/", name, nest))
+		appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s.jar!/", nest.Filename()))
 	}
 
 	return doc

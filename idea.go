@@ -29,11 +29,23 @@ func Idea() {
 	ctx := dependency.DownloadContext{
 		Repos: file.Mavens,
 	}
+	dependencies := make(map[dependency.Dependency][]dependency.Dependency, 0)
 	for _, dep := range file.Dependencies {
-		err := gradle.DownloadLib(dep, ctx)
+		jar, err := gradle.DownloadLib(dep, ctx)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "download (%s): %v\n", dep.Vendor.Identifier(), err)
 			failed = true
+		}
+		dependencies[dep] = make([]dependency.Dependency, 0)
+
+		for _, nest := range gradle.DownloadNestedJars(dep.Filename(), jar) {
+			dependencies[dep] = append(dependencies[dep], dependency.Dependency{
+				Vendor:     dependency.NestedVendor{Parent: dep.Filename()},
+				Link:       nest,
+				Version:    nil,
+				Indirect:   dep.Indirect,
+				OmitVendor: false,
+			})
 		}
 	}
 
@@ -57,7 +69,7 @@ func Idea() {
 
 	// generate libraries
 	for _, dep := range file.Dependencies {
-		doc := idea.MakeLibrary(dep.Filename(), make([]string, 0))
+		doc := idea.MakeLibrary(dep.Filename(), dependencies[dep])
 		doc.Indent(2)
 
 		err := doc.WriteToFile(filepath.Join(".idea", "libraries", dep.Filename()+".xml"))
