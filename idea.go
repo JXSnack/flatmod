@@ -47,7 +47,7 @@ func Idea() {
 			file.Group,
 			[]string{},
 		)
-		doc.Indent(4)
+		doc.Indent(2)
 		err := doc.WriteToFile(filepath.Join(".idea", "flatmod-project.iml"))
 
 		if err != nil {
