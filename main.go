@@ -28,6 +28,7 @@ func main() {
 		fmt.Println("\tcheck\tread configuration files for errors")
 		fmt.Println("\tclean\tremove cached files")
 		fmt.Println("\tidea\tupdate IntelliJ configuration")
+		fmt.Println("\tinit\tcreate a new project")
 		fmt.Println("\ttidy\tensure .fmod matches source code")
 		return
 	}
@@ -39,6 +40,8 @@ func main() {
 		Clean()
 	case "idea":
 		Idea()
+	case "init":
+		Init()
 	case "tidy":
 		Tidy()
 	default:
