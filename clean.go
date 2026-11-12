@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/JXSnack/flatmod/cache"
 	"github.com/JXSnack/flatmod/helper"
@@ -22,6 +23,12 @@ func Clean() {
 	// clear .flatmod
 	helper.Vprintf("clean: deleting .flatmod directory")
 	if err := os.RemoveAll(".flatmod"); err != nil {
+		fmt.Fprintf(os.Stderr, "%v", err)
+	}
+
+	// clear libraries
+	helper.Vprintf("clean: deleting downloaded libraries")
+	if err := os.RemoveAll(filepath.Join(helper.PathMain(), "libraries")); err != nil {
 		fmt.Fprintf(os.Stderr, "%v", err)
 	}
 }
