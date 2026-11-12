@@ -49,12 +49,12 @@ func Find(path string) (*File, error) {
 
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return nil, err
+		return &File{}, err
 	}
 
 	file, errs := Read(data, path)
 	if len(errs) == 0 {
-		return file, nil
+		return &File{}, nil
 	}
 
 	bigErr := make([]string, 0)
