@@ -60,3 +60,20 @@ func ApplyConfigToFile(c Config, file *modfile.File) error {
 
 	return nil
 }
+
+func ApplyInitConfigToFile(c Config, file *modfile.File) error {
+	for _, init := range c.Init.Require {
+		dep, err := dependency.Parse(init)
+		if err != nil {
+			return err
+		}
+		file.Dependencies = append(file.Dependencies, dep)
+	}
+
+	for _, link := range c.Init.Maven {
+		repo := maven.Repo{Link: link}
+		file.Mavens = append(file.Mavens, repo)
+	}
+
+	return nil
+}
