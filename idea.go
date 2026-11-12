@@ -41,5 +41,18 @@ func Idea() {
 		os.Exit(1)
 	}
 
-	fmt.Println(idea.GetIML())
+	if idea.GetIML() == "" {
+		doc := idea.MakeIML(
+			cfg.FacetPlatform,
+			file.Group,
+			[]string{},
+		)
+		doc.Indent(4)
+		err := doc.WriteToFile(filepath.Join(".idea", "flatmod-project.iml"))
+
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "flatmod: failed to create IML file: %v\n", err)
+			os.Exit(1)
+		}
+	}
 }
