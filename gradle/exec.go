@@ -30,7 +30,11 @@ func (w *Workspace) ExecGradlew(gradleArgs []string) error {
 		return err
 	}
 
-	cmd.Env = append(os.Environ(), "JAVA_HOME="+jdk)
+	if jdk == "" {
+		cmd.Env = os.Environ()
+	} else {
+		cmd.Env = append(os.Environ(), "JAVA_HOME="+jdk)
+	}
 	cmd.Dir = w.Dir()
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
