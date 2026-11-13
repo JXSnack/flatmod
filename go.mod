@@ -3,8 +3,12 @@ module github.com/JXSnack/flatmod
 go 1.26.0
 
 require github.com/beevik/etree v1.8.1
+
 require github.com/otiai10/copy v1.14.1
+
 require github.com/go-git/go-git/v5 v5.19.3
+
+require github.com/magiconair/properties v1.18.13
 
 require (
 	dario.cat/mergo v1.0.0 // indirect
