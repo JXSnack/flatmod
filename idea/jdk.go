@@ -44,7 +44,7 @@ func GetJDK() (string, error) {
 		for _, jdkTag := range doc.FindElements("//jdk") {
 			if jdkTag.SelectElement("name").SelectAttrValue("value", "") == jdk {
 				helper.Vprintf("idea: using project sdk %q\n", jdk)
-				return jdkTag.SelectElement("homePath").SelectAttrValue("value", ""), nil
+				return ResolveVars(jdkTag.SelectElement("homePath").SelectAttrValue("value", "")), nil
 			}
 		}
 	}
