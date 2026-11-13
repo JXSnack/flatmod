@@ -14,7 +14,7 @@ func Write(path string, checksum [16]byte, data []byte) error {
 		return fmt.Errorf("cache isn't initialized, skipping write for %q", path)
 	}
 
-	if helper.IsNoCache() {
+	if !helper.CacheEnabled {
 		return nil
 	}
 

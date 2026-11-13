@@ -25,7 +25,7 @@ func makeGitURL(rawURL string) string {
 	rawURL = strings.TrimPrefix(rawURL, "http://")
 	rawURL = strings.TrimSuffix(rawURL, ".git")
 
-	if helper.ForceGitHTTPS() {
+	if helper.ForceGitHTTPS {
 		return "https://" + rawURL
 	}
 

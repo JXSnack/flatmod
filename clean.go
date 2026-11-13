@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 
@@ -8,7 +9,11 @@ import (
 	"github.com/JXSnack/flatmod/helper"
 )
 
+var CleanCommand = flag.NewFlagSet("clean", flag.ExitOnError)
+
 func Clean() {
+	CleanCommand.Parse(os.Args[1:])
+
 	// init cache
 	if err := cache.Init(); err != nil {
 		fmt.Fprintf(os.Stderr, "%v", err)

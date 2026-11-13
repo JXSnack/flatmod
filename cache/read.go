@@ -26,7 +26,7 @@ func Read(path string, checksum [16]byte, get func() ([]byte, error)) ([]byte, e
 		return get()
 	}
 
-	if helper.IsNoCache() {
+	if !helper.CacheEnabled {
 		return get()
 	}
 

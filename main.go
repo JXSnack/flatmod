@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"strings"
@@ -12,32 +13,58 @@ import (
 )
 
 func main() {
-	for i, arg := range os.Args {
-		if strings.HasPrefix(arg, "-") {
-			helper.Opts = append(helper.Opts, strings.TrimPrefix(arg, "-"))
-			os.Args = append(os.Args[:i], os.Args[i+1:]...)
+	// global flags
+	globalFlags := flag.NewFlagSet("fmod", flag.ExitOnError)
+
+	verbose := globalFlags.Bool("v", false, "print more information")
+	gitHTTPS := globalFlags.Bool("git-https", false, "use https instead of ssh for git connections")
+	noCache := globalFlags.Bool("no-cache", false, "disable cache reading and writing")
+
+	// find command beginning
+	args := os.Args[1:]
+
+	commandIndex := -1
+	for i, arg := range args {
+		if len(arg) > 0 && arg[0] != '-' {
+			commandIndex = i
+			break
 		}
 	}
 
-	if len(os.Args) == 1 {
+	if commandIndex == -1 {
 		fmt.Println("fmod is used for managing Flatmod source code.")
 		fmt.Println()
-		fmt.Println("Usage: fmod <command> [args]")
+		fmt.Println("Usage: fmod [global args] <command> [command args]")
 		fmt.Println()
 		fmt.Println("All commands:")
 		fmt.Println("\tcheck\tread configuration files for errors")
 		fmt.Println("\tclean\tremove cached files")
+		fmt.Println("\tgradle\trun gradle command")
 		fmt.Println("\tidea\tupdate IntelliJ configuration")
 		fmt.Println("\tinit\tcreate a new project")
 		fmt.Println("\ttidy\tensure .fmod matches source code")
 		return
 	}
 
-	switch os.Args[1] {
+	// parse global flags
+	if err := globalFlags.Parse(args[:commandIndex]); err != nil {
+		os.Exit(1)
+	}
+
+	helper.Verbose = *verbose
+	helper.ForceGitHTTPS = *gitHTTPS
+	helper.CacheEnabled = !*noCache
+
+	command := os.Args[commandIndex+1]
+	os.Args = append([]string{os.Args[0]}, args[commandIndex+1:]...)
+
+	switch command {
 	case "check":
 		Check()
 	case "clean":
 		Clean()
+	case "gradle":
+		Gradle()
 	case "idea":
 		Idea()
 	case "init":
@@ -45,18 +72,13 @@ func main() {
 	case "tidy":
 		Tidy()
 	default:
-		fmt.Fprintln(os.Stderr, fmt.Sprintf("%s: unknown command", os.Args[1]))
+		fmt.Fprintln(os.Stderr, fmt.Sprintf("%s: unknown command", command))
 		os.Exit(1)
 	}
 }
 
-func GetMod(command string) (*modfile.File, follow.Config) {
+func GetMod(path string) (*modfile.File, follow.Config) {
 	// load .fmod
-	path := ""
-	if len(os.Args) > 2 {
-		path = os.Args[2]
-	}
-
 	file, err := modfile.Find(path)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%v", err)
@@ -79,15 +101,19 @@ func GetMod(command string) (*modfile.File, follow.Config) {
 	// load follow
 	config, err := follow.GetConfig(file.Follow, file.FollowBranch)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %v", command, err)
+		fmt.Fprintf(os.Stderr, "flatmod: %v", err)
 		os.Exit(1)
 	}
 
 	err = follow.ApplyConfigToFile(config, file)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s: %v", command, err)
+		fmt.Fprintf(os.Stderr, "flatmod: %v", err)
 		os.Exit(1)
 	}
 
 	return file, config
+}
+
+func PathFlag(set *flag.FlagSet) *string {
+	return set.String("p", "", "the path to the flatmod file in case of multiple files")
 }

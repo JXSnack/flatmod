@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -10,13 +11,19 @@ import (
 	"github.com/JXSnack/flatmod/idea"
 )
 
+var IdeaCommand = flag.NewFlagSet("idea", flag.ExitOnError)
+
 func Idea() {
 	if _, err := os.Stat(".idea"); err != nil {
 		fmt.Fprintf(os.Stderr, "idea: no .idea directory found")
 		os.Exit(1)
 	}
 
-	file, cfg := GetMod("idea")
+	// command
+	path := PathFlag(IdeaCommand)
+	IdeaCommand.Parse(os.Args[1:])
+
+	file, cfg := GetMod(*path)
 	if file == nil {
 		os.Exit(1)
 	}

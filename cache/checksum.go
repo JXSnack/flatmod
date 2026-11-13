@@ -22,7 +22,7 @@ func GetChecksum(path string) ([16]byte, error) {
 		return [16]byte{}, fmt.Errorf("cache isn't initialized, skipping GetChecksum for %q", path)
 	}
 
-	if helper.IsNoCache() {
+	if !helper.CacheEnabled {
 		return [16]byte{}, fmt.Errorf("cache is disabled")
 	}
 

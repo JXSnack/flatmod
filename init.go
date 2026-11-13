@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 
@@ -11,7 +12,11 @@ import (
 	"github.com/JXSnack/flatmod/modfile"
 )
 
+var InitCommand = flag.NewFlagSet("init", flag.ExitOnError)
+
 func Init() {
+	InitCommand.Parse(os.Args[1:])
+
 	if file, _ := modfile.Find(""); file != nil {
 		fmt.Fprintf(os.Stderr, "flatmod: there already exists a project in this directory\n")
 		os.Exit(1)
@@ -24,12 +29,12 @@ func Init() {
 	}
 
 	// ensure follow exists
-	if len(os.Args) < 4 {
+	if len(os.Args) < 3 {
 		fmt.Fprintf(os.Stderr, "flatmod: require follow repository and branch\n")
 		os.Exit(1)
 	}
 
-	cfg, err := follow.GetConfig(os.Args[2], os.Args[3])
+	cfg, err := follow.GetConfig(os.Args[1], os.Args[2])
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "flatmod: %v\n", err)
 		os.Exit(1)
@@ -40,8 +45,8 @@ func Init() {
 		Path: "mc.fmod",
 
 		Group:        "com.example.mod",
-		Follow:       os.Args[2],
-		FollowBranch: os.Args[3],
+		Follow:       os.Args[1],
+		FollowBranch: os.Args[2],
 
 		Dependencies: make([]dependency.Dependency, 0),
 		Mavens:       make([]maven.Repo, 0),

@@ -1,12 +1,18 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 )
 
+var TidyCommand = flag.NewFlagSet("tidy", flag.ExitOnError)
+
 func Tidy() {
-	file, _ := GetMod("tidy")
+	path := PathFlag(TidyCommand)
+	TidyCommand.Parse(os.Args[1:])
+
+	file, _ := GetMod(*path)
 	if file == nil {
 		os.Exit(1)
 	}
