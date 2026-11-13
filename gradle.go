@@ -23,16 +23,19 @@ func Gradle() {
 	workspace, err := gradle.NewWorkspace(file)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "flatmod: %v\n", err)
+		os.Exit(1)
 	}
 
 	err = workspace.Generate()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "flatmod: %v\n", err)
+		os.Exit(1)
 	}
 
 	// execute command
 	err = workspace.ExecGradlew(GradleCommand.Args())
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "flatmod: %v\n", err)
+		os.Exit(1)
 	}
 }
