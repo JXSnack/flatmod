@@ -86,7 +86,7 @@ func (w *Workspace) Generate() error {
 
 		if zf.FileInfo().IsDir() {
 			r.Close()
-			if err := os.MkdirAll(path, zf.Mode()); err != nil {
+			if err := os.MkdirAll(path, 0755); err != nil {
 				return fmt.Errorf("workspace: %w", err)
 			}
 		} else {
@@ -103,7 +103,7 @@ func (w *Workspace) Generate() error {
 
 			content := modfile.FillProperties(w.File, string(data))
 
-			if err := os.WriteFile(path, []byte(content), zf.Mode()); err != nil {
+			if err := os.WriteFile(path, []byte(content), 0755); err != nil {
 				return fmt.Errorf("workspace: %w", err)
 			}
 		}
