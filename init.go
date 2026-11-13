@@ -15,7 +15,10 @@ import (
 var InitCommand = flag.NewFlagSet("init", flag.ExitOnError)
 
 func Init() {
+	group := InitCommand.String("group", "com.example.mod", "the group for the initialized mod")
+
 	InitCommand.Parse(os.Args[1:])
+	args := InitCommand.Args()
 
 	if file, _ := modfile.Find(""); file != nil {
 		fmt.Fprintf(os.Stderr, "flatmod: there already exists a project in this directory\n")
@@ -29,12 +32,12 @@ func Init() {
 	}
 
 	// ensure follow exists
-	if len(os.Args) < 3 {
+	if len(args) != 2 {
 		fmt.Fprintf(os.Stderr, "flatmod: require follow repository and branch\n")
 		os.Exit(1)
 	}
 
-	cfg, err := follow.GetConfig(os.Args[1], os.Args[2])
+	cfg, err := follow.GetConfig(args[0], args[1])
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "flatmod: %v\n", err)
 		os.Exit(1)
@@ -44,9 +47,9 @@ func Init() {
 	file := &modfile.File{
 		Path: "mc.fmod",
 
-		Group:        "com.example.mod",
-		Follow:       os.Args[1],
-		FollowBranch: os.Args[2],
+		Group:        *group,
+		Follow:       args[0],
+		FollowBranch: args[1],
 
 		Dependencies: make([]dependency.Dependency, 0),
 		Mavens:       make([]maven.Repo, 0),
