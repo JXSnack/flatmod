@@ -16,13 +16,5 @@ based on the idea that flat development is less likely to intertwine and easier 
 
 <img src=".docs/badge.png"/>
 
-## Options
-
-| Name              | Action                                |
-|-------------------|---------------------------------------|
-| `-v`, `--verbose` | print more information                |
-| `--git-https`     | force a git https over ssh connection |
-| `--no-cache`      | disable cache reading and writing     |
-
 ## Honorable mentions
 [@ThePinkPotato](https://github.com/ThePinkPotato/) for the icon and human intelligence banner
