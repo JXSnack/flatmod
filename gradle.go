@@ -22,14 +22,17 @@ func Gradle() {
 	// make workspace
 	workspace, err := gradle.NewWorkspace(file)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "idea: %v\n", err)
+		fmt.Fprintf(os.Stderr, "flatmod: %v\n", err)
 	}
 
 	err = workspace.Generate()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "idea: %v\n", err)
+		fmt.Fprintf(os.Stderr, "flatmod: %v\n", err)
 	}
 
 	// execute command
-	//workspace.ExecGradlew(os.Args)
+	err = workspace.ExecGradlew(GradleCommand.Args())
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "flatmod: %v\n", err)
+	}
 }
