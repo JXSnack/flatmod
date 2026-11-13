@@ -15,6 +15,10 @@ func (v NestedVendor) Identifier() string {
 }
 
 func (v NestedVendor) Filename(link string, version version.Version) string {
+	return v.Name(link)
+}
+
+func (v NestedVendor) Name(link string) string {
 	return filepath.Join(v.Parent+"-nested", link)
 }
 
