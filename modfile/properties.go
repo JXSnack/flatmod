@@ -17,6 +17,7 @@ func FillProperties(file *File, text string) string {
 
 	text = strings.ReplaceAll(text, "%flatmod:maven%", formatMavens(file, "    "))
 	text = strings.ReplaceAll(text, "%flatmod:dependencies%", formatDependencies(file, "    "))
+	text = strings.ReplaceAll(text, "%flatmod:dependency_properties%", formatDependencyProperties(file))
 	text = strings.ReplaceAll(text, "%flatmod:root%", filepath.Base(wd))
 	text = strings.ReplaceAll(text, "%flatmod:rootid%", helper.ReValidId.ReplaceAllString(filepath.Base(wd), "_"))
 	text = strings.ReplaceAll(text, "%flatmod:group%", file.Group)
@@ -50,6 +51,24 @@ func formatDependencies(file *File, prefix string) string {
 
 		b.WriteString(prefix)
 		b.WriteString(dep.Vendor.FormatGradle(dep.Link))
+		b.WriteString("\n")
+	}
+
+	return b.String()
+}
+
+func formatDependencyProperties(file *File) string {
+	b := strings.Builder{}
+
+	for _, dep := range file.Dependencies {
+		if dep.Indirect {
+			continue
+		}
+
+		b.WriteString("dep_")
+		b.WriteString(dep.Name())
+		b.WriteString("=")
+		b.WriteString(dep.Version.String())
 		b.WriteString("\n")
 	}
 
