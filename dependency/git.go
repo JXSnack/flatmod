@@ -25,7 +25,11 @@ func (g Git) FormatGradle(link string) string {
 func (g Git) Filename(link string, version version.Version) string {
 	return fmt.Sprintf(
 		"%s-%s",
-		helper.ReValidId.ReplaceAllString(strings.SplitN(link, "/", 2)[1], "_"),
+		g.Name(link),
 		helper.ReValidId.ReplaceAllString(version.String(), "_"),
 	)
+}
+
+func (g Git) Name(link string) string {
+	return helper.ReValidId.ReplaceAllString(strings.SplitN(link, "/", 2)[1], "_")
 }

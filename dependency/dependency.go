@@ -43,6 +43,11 @@ func (d Dependency) Filename() string {
 	return d.Vendor.Filename(d.Link, d.Version)
 }
 
+// Name returns only the dependency name without any link attributes
+func (d Dependency) Name() string {
+	return d.Vendor.Name(d.Link)
+}
+
 // NameHash returns a md5 hash of the Link and Version.
 func (d Dependency) NameHash() [16]byte {
 	return md5.Sum([]byte(d.Link + d.Version.String()))

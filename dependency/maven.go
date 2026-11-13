@@ -56,7 +56,11 @@ func (m Maven) FormatGradle(link string) string {
 func (m Maven) Filename(link string, version version.Version) string {
 	return fmt.Sprintf(
 		"%s-%s",
-		helper.ReValidId.ReplaceAllString(strings.SplitN(link, ":", 2)[1], "_"),
+		m.Name(link),
 		helper.ReValidId.ReplaceAllString(version.String(), "_"),
 	)
+}
+
+func (m Maven) Name(link string) string {
+	return helper.ReValidId.ReplaceAllString(strings.SplitN(link, ":", 2)[1], "_")
 }
