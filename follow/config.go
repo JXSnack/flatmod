@@ -7,6 +7,7 @@ import (
 	"github.com/JXSnack/flatmod/dependency"
 	"github.com/JXSnack/flatmod/maven"
 	"github.com/JXSnack/flatmod/modfile"
+	"github.com/JXSnack/flatmod/remap"
 )
 
 type Config struct {
@@ -18,6 +19,9 @@ type Config struct {
 
 	// Retain-ed files are the only files not deleted on Gradle workspace generation
 	Retain []string `json:"retain"`
+
+	// Remap is the remapping configuration for dependencies. Leave empty for no remapping.
+	Remap remap.Mapping `json:"remap"`
 
 	// Extract-ed files are files extracted from the repository on project creation.
 	// They are also removed when generating the Gradle workspace. File paths may include
