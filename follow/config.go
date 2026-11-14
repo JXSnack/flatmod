@@ -17,6 +17,9 @@ type Config struct {
 	// what mod loader you're using.
 	FacetPlatform string `json:"facetPlatform"`
 
+	// Minecraft is the game version targeting the Mojang service.
+	Minecraft string `json:"minecraft"`
+
 	// Retain-ed files are the only files not deleted on Gradle workspace generation
 	Retain []string `json:"retain"`
 
