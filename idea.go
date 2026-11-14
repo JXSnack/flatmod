@@ -41,12 +41,19 @@ func Idea() {
 	for _, dep := range file.Dependencies {
 		jar, err := gradle.DownloadLib(dep, ctx)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "download (%s): %v\n", dep.Vendor.Identifier(), err)
+			fmt.Fprintf(os.Stderr, "flatmod: failed to download (%s): %v\n", dep.Vendor.Identifier(), err)
 			failed = true
 		}
 		dependencies[dep] = make([]dependency.Dependency, 0)
 
-		for _, nest := range gradle.ExtractNestedJars(dep.Filename(), jar) {
+		// extract nested jars
+		nests, err := gradle.ExtractNestedJars(dep.Filename(), jar, ctx)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "flatmod: failed to extract %q: %v\n", dep.Link, err)
+			failed = true
+		}
+
+		for _, nest := range nests {
 			dependencies[dep] = append(dependencies[dep], dependency.Dependency{
 				Vendor:     dependency.NestedVendor{Parent: dep.Filename()},
 				Link:       nest,
