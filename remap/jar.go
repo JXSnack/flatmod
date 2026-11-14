@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+
+	"github.com/JXSnack/flatmod/helper"
 )
 
 // Jar remaps a single jar file at the input path. The remapped jar is saved at the
@@ -28,8 +30,12 @@ func Jar(inputPath string, outputPath string, settings Settings) error {
 		settings.To,   // e.g. official
 	}
 	cmd := exec.Command("java", args...)
-	cmd.Stdout = os.Stdout
-	cmd.Stdin = os.Stdin
+
+	if helper.Verbose {
+		cmd.Stdin = os.Stdin
+		cmd.Stdout = os.Stdout
+	}
+	cmd.Stderr = os.Stderr
 
 	return cmd.Run()
 }
