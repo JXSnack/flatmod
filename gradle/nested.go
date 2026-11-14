@@ -11,7 +11,7 @@ import (
 	"github.com/JXSnack/flatmod/helper"
 )
 
-func DownloadNestedJars(parentName string, jar []byte) []string {
+func ExtractNestedJars(parentName string, jar []byte) []string {
 	zr, err := zip.NewReader(bytes.NewReader(jar), int64(len(jar)))
 	if err != nil {
 		return make([]string, 0)
@@ -34,7 +34,7 @@ func DownloadNestedJars(parentName string, jar []byte) []string {
 			nested = append(nested, name)
 
 			cache.Write(filepath.Join("libraries", parentName+"-nested", name+".jar"), helper.ZeroSum(), nest)
-			for _, recNest := range DownloadNestedJars(parentName, nest) {
+			for _, recNest := range ExtractNestedJars(parentName, nest) {
 				nested = append(nested, recNest)
 			}
 		}

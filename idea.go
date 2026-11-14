@@ -45,7 +45,7 @@ func Idea() {
 		}
 		dependencies[dep] = make([]dependency.Dependency, 0)
 
-		for _, nest := range gradle.DownloadNestedJars(dep.Filename(), jar) {
+		for _, nest := range gradle.ExtractNestedJars(dep.Filename(), jar) {
 			dependencies[dep] = append(dependencies[dep], dependency.Dependency{
 				Vendor:     dependency.NestedVendor{Parent: dep.Filename()},
 				Link:       nest,
