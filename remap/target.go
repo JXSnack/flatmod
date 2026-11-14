@@ -28,7 +28,7 @@ func HashMappings(settings Settings) string {
 
 // DownloadMappings downloads the given mappings. Returns the path to the mappings.
 func DownloadMappings(settings Settings) (string, error) {
-	path := HashMappings(settings) + ".tiny"
+	path := filepath.Join("mappings", HashMappings(settings)+".tiny")
 
 	// download if not in cache
 	_, err := cache.Read(path, helper.ZeroSum(), func() ([]byte, error) {
