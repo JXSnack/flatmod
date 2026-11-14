@@ -12,7 +12,7 @@ import (
 // Jar remaps a single jar file at the input path. The remapped jar is saved at the
 // output path.
 func Jar(inputPath string, outputPath string, settings Settings) error {
-	fmt.Printf("flatmod: remapping %s\n", filepath.Base(inputPath))
+	helper.Vprintf("remap: %s\n", filepath.Base(inputPath))
 
 	remapperPath, err := DownloadTinyRemapper()
 	if err != nil {
