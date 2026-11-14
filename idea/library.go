@@ -7,7 +7,8 @@ import (
 	"github.com/beevik/etree"
 )
 
-func MakeLibrary(name string, nested []dependency.Dependency, jarSuffix string) *etree.Document {
+// makeBaseLib creates a basic library XML and returns the base document and CLASSES.
+func makeBaseLib(name string) (*etree.Document, *etree.Element) {
 	doc := etree.NewDocument()
 	doc.CreateProcInst("xml", `version="1.0" encoding="UTF-8"`)
 
@@ -20,6 +21,11 @@ func MakeLibrary(name string, nested []dependency.Dependency, jarSuffix string) 
 
 	// classes
 	classes := library.CreateElement("CLASSES")
+	return doc, classes
+}
+
+func MakeLibrary(name string, nested []dependency.Dependency, jarSuffix string) *etree.Document {
+	doc, classes := makeBaseLib(name)
 
 	appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s%s.jar!/", name, jarSuffix))
 	for _, nest := range nested {
