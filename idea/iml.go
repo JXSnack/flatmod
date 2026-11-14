@@ -112,6 +112,11 @@ func appendModuleContent(nmrm *etree.Element, group string) {
 }
 
 func appendLibraries(nmrm *etree.Element, libraries []dependency.Dependency) {
+	mc := nmrm.CreateElement("orderEntry")
+	mc.CreateAttr("type", "library")
+	mc.CreateAttr("name", "minecraft")
+	mc.CreateAttr("level", "project")
+
 	for _, lib := range libraries {
 		e := nmrm.CreateElement("orderEntry")
 		e.CreateAttr("type", "library")
