@@ -21,9 +21,9 @@ func MakeLibrary(name string, nested []dependency.Dependency) *etree.Document {
 	// classes
 	classes := library.CreateElement("CLASSES")
 
-	appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s.jar!/", name))
+	appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s-remapped.jar!/", name))
 	for _, nest := range nested {
-		appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s.jar!/", nest.Filename()))
+		appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s-remapped.jar!/", nest.Filename()))
 	}
 
 	return doc
