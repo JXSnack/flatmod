@@ -27,7 +27,7 @@ type Version struct {
 	Id          string `json:"id"`
 	JavaVersion struct {
 		Component    string `json:"component"`
-		MajorVersion string `json:"majorVersion"`
+		MajorVersion int    `json:"majorVersion"`
 	} `json:"javaVersion"`
 	Libraries              []Library `json:"libraries"`
 	MainClass              string    `json:"mainClass"`

@@ -12,7 +12,7 @@ import (
 type Artifact struct {
 	Path string `json:"path"`
 	SHA1 string `json:"sha1"`
-	Size string `json:"size"`
+	Size int    `json:"size"`
 	URL  string `json:"url"`
 }
 
