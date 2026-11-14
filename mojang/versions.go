@@ -18,6 +18,7 @@ type VersionManifest struct {
 		Id   string `json:"id"`
 		Type string `json:"type"`
 		URL  string `json:"url"`
+		SHA1 string `json:"sha1"`
 	} `json:"versions"`
 }
 
@@ -51,6 +52,8 @@ func GetVersion(version string) (Version, error) {
 			if err != nil {
 				return Version{}, fmt.Errorf("decoding version: %w", err)
 			}
+
+			actualVer.SHA1 = ver.SHA1
 			return actualVer, nil
 		}
 	}

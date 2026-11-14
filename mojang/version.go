@@ -32,4 +32,6 @@ type Version struct {
 	MainClass              string    `json:"mainClass"`
 	MinimumLauncherVersion int       `json:"minimumLauncherVersion"`
 	Type                   string    `json:"type"`
+
+	SHA1 string `json:"sha1"`
 }
