@@ -24,6 +24,7 @@ type Version struct {
 		Server         Download `json:"server"`
 		ServerMappings Download `json:"server_mappings"`
 	} `json:"downloads"`
+	Id          string `json:"id"`
 	JavaVersion struct {
 		Component    string `json:"component"`
 		MajorVersion string `json:"majorVersion"`
