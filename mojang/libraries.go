@@ -1,5 +1,14 @@
 package mojang
 
+import (
+	"io"
+	"net/http"
+	"path/filepath"
+
+	"github.com/JXSnack/flatmod/cache"
+	"github.com/JXSnack/flatmod/helper"
+)
+
 type Artifact struct {
 	Path string `json:"path"`
 	SHA1 string `json:"sha1"`
@@ -12,4 +21,26 @@ type Library struct {
 		Artifact Artifact `json:"artifact"`
 	} `json:"downloads"`
 	Name string `json:"name"`
+}
+
+// DownloadLibrary downloads the requested library or uses the cache.
+func DownloadLibrary(library Library, sum [16]byte) (string, error) {
+	path := filepath.Join("libraries", helper.ReValidId.ReplaceAllString(library.Name, "_")+".jar")
+	_, err := cache.Read(filepath.Join(), sum, func() ([]byte, error) {
+		// download artifact
+		resp, err := http.Get(library.Downloads.Artifact.URL)
+		if err != nil {
+			return []byte{}, err
+		}
+		defer resp.Body.Close()
+
+		data, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return []byte{}, err
+		}
+
+		return data, nil
+	})
+
+	return filepath.Join(cache.FileDir, path), err
 }
