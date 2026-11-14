@@ -19,7 +19,7 @@ func ExtractNestedJars(parentName string, jar []byte) []string {
 
 	nested := make([]string, 0)
 	for _, file := range zr.File {
-		if strings.HasPrefix(file.Name, filepath.Join("META-INF", "jars")) {
+		if strings.HasPrefix(file.Name, filepath.Join("META-INF", "jars")) && strings.HasSuffix(file.Name, ".jar") {
 			r, err := file.Open()
 			if err != nil {
 				continue
