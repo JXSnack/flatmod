@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/JXSnack/flatmod/dependency"
 	"github.com/JXSnack/flatmod/gradle"
@@ -67,13 +66,13 @@ func Idea() {
 	mcLibs := make([]string, 0)
 	for _, lib := range mcVersion.Libraries {
 		sum := md5.Sum([]byte(mcVersion.SHA1))
-		_, err := mojang.DownloadLibrary(lib, sum)
+		libPath, err := mojang.DownloadLibrary(lib, sum)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "flatmod: failed downloading %q: %v\n", lib.Name, err)
 			os.Exit(1)
 		}
 
-		mcLibs = append(mcLibs, strings.Split(lib.Name, ":")[1])
+		mcLibs = append(mcLibs, filepath.Base(libPath))
 	}
 
 	// download jars

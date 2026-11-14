@@ -41,7 +41,7 @@ func MakeMinecraft(version string, libs []string, jarSuffix string) *etree.Docum
 	appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/minecraft/%s/client%s.jar!/", version, jarSuffix))
 	appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/minecraft/%s/server%s.jar!/", version, jarSuffix))
 	for _, lib := range libs {
-		appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s.jar!/", lib))
+		appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s!/", lib))
 	}
 
 	return doc
