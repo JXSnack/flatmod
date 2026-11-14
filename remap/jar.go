@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 
 	"github.com/JXSnack/flatmod/helper"
 )
@@ -11,6 +12,8 @@ import (
 // Jar remaps a single jar file at the input path. The remapped jar is saved at the
 // output path.
 func Jar(inputPath string, outputPath string, settings Settings) error {
+	fmt.Printf("flatmod: remapping %s\n", filepath.Base(inputPath))
+
 	remapperPath, err := DownloadTinyRemapper()
 	if err != nil {
 		return fmt.Errorf("failed to download remapper: %w", err)
