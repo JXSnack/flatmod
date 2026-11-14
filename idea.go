@@ -1,14 +1,17 @@
 package main
 
 import (
+	"crypto/md5"
 	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/JXSnack/flatmod/dependency"
 	"github.com/JXSnack/flatmod/gradle"
 	"github.com/JXSnack/flatmod/idea"
+	"github.com/JXSnack/flatmod/mojang"
 )
 
 var IdeaCommand = flag.NewFlagSet("idea", flag.ExitOnError)
@@ -28,10 +31,52 @@ func Idea() {
 		os.Exit(1)
 	}
 
-	// download jars
+	// download Minecraft
 	downloadPath := filepath.Join(".idea", "libraries")
 	os.MkdirAll(downloadPath, 0700)
 
+	mcVersion, err := mojang.GetVersion(cfg.Minecraft)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "flatmod: %v\n", err)
+		os.Exit(1)
+	}
+
+	// download Minecraft client
+	err = mojang.DownloadHead(
+		mcVersion.Downloads.Client.URL, mcVersion.Id,
+		md5.Sum([]byte(mcVersion.Downloads.Client.SHA1)),
+		"client", cfg.Remap,
+	)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "flatmod: failed to download client: %v\n", err)
+		os.Exit(1)
+	}
+
+	// download Minecraft server
+	err = mojang.DownloadHead(
+		mcVersion.Downloads.Server.URL, mcVersion.Id,
+		md5.Sum([]byte(mcVersion.Downloads.Server.SHA1)),
+		"server", cfg.Remap,
+	)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "flatmod: failed to download server: %v\n", err)
+		os.Exit(1)
+	}
+
+	// download Minecraft libraries
+	mcLibs := make([]string, 0)
+	for _, lib := range mcVersion.Libraries {
+		sum := md5.Sum([]byte(mcVersion.SHA1))
+		_, err := mojang.DownloadLibrary(lib, sum)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "flatmod: failed downloading %q: %v\n", lib.Name, err)
+			os.Exit(1)
+		}
+
+		mcLibs = append(mcLibs, strings.Split(lib.Name, ":")[1])
+	}
+
+	// download jars
 	failed := false
 	ctx := dependency.DownloadContext{
 		Repos: file.Mavens,
@@ -75,16 +120,34 @@ func Idea() {
 		file.Dependencies,
 	)
 	doc.Indent(2)
-	err := doc.WriteToFile(filepath.Join(".idea", "flatmod-project.iml"))
+	err = doc.WriteToFile(filepath.Join(".idea", "flatmod-project.iml"))
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "flatmod: failed to create IML file: %v\n", err)
 		os.Exit(1)
 	}
 
+	// make jar suffixes
+	var suffix string
+	if cfg.Remap.TinyJar == "" {
+		suffix = ""
+	} else {
+		suffix = "-remapped"
+	}
+
+	// minecraft dependency
+	mc := idea.MakeMinecraft(mcVersion.Id, mcLibs, suffix)
+	mc.Indent(2)
+
+	err = mc.WriteToFile(filepath.Join(".idea", "libraries", fmt.Sprintf("minecraft.xml")))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "flatmod: %v\n", err)
+		os.Exit(1)
+	}
+
 	// generate libraries
 	for _, dep := range file.Dependencies {
-		doc := idea.MakeLibrary(dep.Filename(), dependencies[dep], "-remapped")
+		doc := idea.MakeLibrary(dep.Filename(), dependencies[dep], suffix)
 		doc.Indent(2)
 
 		err := doc.WriteToFile(filepath.Join(".idea", "libraries", dep.Filename()+".xml"))
