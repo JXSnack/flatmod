@@ -4,6 +4,7 @@ import (
 	"io"
 	"net/http"
 	"path/filepath"
+	"strings"
 
 	"github.com/JXSnack/flatmod/cache"
 	"github.com/JXSnack/flatmod/helper"
@@ -25,8 +26,9 @@ type Library struct {
 
 // DownloadLibrary downloads the requested library or uses the cache.
 func DownloadLibrary(library Library, sum [16]byte) (string, error) {
-	path := filepath.Join("libraries", helper.ReValidId.ReplaceAllString(library.Name, "_")+".jar")
-	_, err := cache.Read(filepath.Join(), sum, func() ([]byte, error) {
+	name := strings.Split(library.Name, ":")[1]
+	path := filepath.Join("libraries", helper.ReValidId.ReplaceAllString(name, "_")+".jar")
+	_, err := cache.Read(path, sum, func() ([]byte, error) {
 		helper.Vprintf("mojang: downloading %q\n", library.Name)
 
 		// download artifact
