@@ -24,7 +24,8 @@ type Library struct {
 	Name string `json:"name"`
 }
 
-// DownloadLibrary downloads the requested library or uses the cache.
+// DownloadLibrary downloads the requested library or uses the cache. Returns the path where the
+// library was saved.
 func DownloadLibrary(library Library, sum [16]byte) (string, error) {
 	name := strings.Split(library.Name, ":")[1]
 	path := filepath.Join("libraries", helper.ReValidId.ReplaceAllString(name, "_")+".jar")
