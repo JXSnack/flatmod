@@ -35,6 +35,7 @@ func Idea() {
 	failed := false
 	ctx := dependency.DownloadContext{
 		Repos: file.Mavens,
+		Remap: cfg.Remap,
 	}
 	dependencies := make(map[dependency.Dependency][]dependency.Dependency, 0)
 	for _, dep := range file.Dependencies {
