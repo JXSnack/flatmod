@@ -84,7 +84,7 @@ func Idea() {
 
 	// generate libraries
 	for _, dep := range file.Dependencies {
-		doc := idea.MakeLibrary(dep.Filename(), dependencies[dep])
+		doc := idea.MakeLibrary(dep.Filename(), dependencies[dep], "-remapped")
 		doc.Indent(2)
 
 		err := doc.WriteToFile(filepath.Join(".idea", "libraries", dep.Filename()+".xml"))

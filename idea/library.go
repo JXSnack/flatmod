@@ -7,7 +7,7 @@ import (
 	"github.com/beevik/etree"
 )
 
-func MakeLibrary(name string, nested []dependency.Dependency) *etree.Document {
+func MakeLibrary(name string, nested []dependency.Dependency, jarSuffix string) *etree.Document {
 	doc := etree.NewDocument()
 	doc.CreateProcInst("xml", `version="1.0" encoding="UTF-8"`)
 
@@ -21,9 +21,9 @@ func MakeLibrary(name string, nested []dependency.Dependency) *etree.Document {
 	// classes
 	classes := library.CreateElement("CLASSES")
 
-	appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s-remapped.jar!/", name))
+	appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s%s.jar!/", name, jarSuffix))
 	for _, nest := range nested {
-		appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s-remapped.jar!/", nest.Filename()))
+		appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s%s.jar!/", nest.Filename(), jarSuffix))
 	}
 
 	return doc
