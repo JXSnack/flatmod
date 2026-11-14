@@ -1,8 +1,10 @@
 package remap
 
-type Mapping struct {
-	TinyURL string `json:"tinyURL"`
-	Name    string `json:"name"`
+type Settings struct {
+	TinyJar  string `json:"tinyJar"`
+	TinyPath string `json:"tinyPath"`
+	From     string `json:"from"`
+	To       string `json:"to"`
 }
 
 // DownloadMapping downloads the given mappings. The hash is used to ensure multiple projects

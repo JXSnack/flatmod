@@ -21,7 +21,7 @@ type Config struct {
 	Retain []string `json:"retain"`
 
 	// Remap is the remapping configuration for dependencies. Leave empty for no remapping.
-	Remap remap.Mapping `json:"remap"`
+	Remap remap.Settings `json:"remap"`
 
 	// Extract-ed files are files extracted from the repository on project creation.
 	// They are also removed when generating the Gradle workspace. File paths may include
