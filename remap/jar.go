@@ -10,20 +10,21 @@ import (
 )
 
 // Jar remaps a single jar file at the input path. The remapped jar is saved at the
-// output path.
-func Jar(inputPath string, outputPath string, settings Settings) error {
+// output path. It returns the content of the remapped jar on success.
+func Jar(inputPath string, outputPath string, settings Settings) ([]byte, error) {
 	helper.Vprintf("remap: %s\n", filepath.Base(inputPath))
 
 	remapperPath, err := DownloadTinyRemapper()
 	if err != nil {
-		return fmt.Errorf("failed to download remapper: %w", err)
+		return []byte{}, fmt.Errorf("failed to download remapper: %w", err)
 	}
 
 	mappingPath, err := DownloadMappings(settings)
 	if err != nil {
-		return fmt.Errorf("failed to download mappings: %w", err)
+		return []byte{}, fmt.Errorf("failed to download mappings: %w", err)
 	}
 
+	// run
 	args := []string{
 		"-jar", remapperPath,
 		inputPath,     // input
@@ -40,5 +41,15 @@ func Jar(inputPath string, outputPath string, settings Settings) error {
 	}
 	cmd.Stderr = os.Stderr
 
-	return cmd.Run()
+	err = cmd.Run()
+	if err != nil {
+		return []byte{}, err
+	}
+
+	// read output
+	data, err := os.ReadFile(outputPath)
+	if err != nil {
+		return []byte{}, err
+	}
+	return data, nil
 }
