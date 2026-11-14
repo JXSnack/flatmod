@@ -45,7 +45,6 @@ func Read(path string, checksum [16]byte, get func() ([]byte, error)) ([]byte, e
 			}
 		}
 	}
-	helper.Vprintf("cache: missed %q\n", path)
 
 	// escalate errors
 	data, err := get()
