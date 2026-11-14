@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"path/filepath"
 
+	"github.com/JXSnack/flatmod/cache"
 	"github.com/JXSnack/flatmod/helper"
 )
 
@@ -52,4 +53,17 @@ func Jar(inputPath string, outputPath string, settings Settings) ([]byte, error)
 		return []byte{}, err
 	}
 	return data, nil
+}
+
+// JarCached runs Jar if the outputPath isn't cached. Therefore, the outputPath will have
+// the cache file directory prepended.
+func JarCached(inputPath string, outputPath string, settings Settings) error {
+	_, err := cache.Read(
+		outputPath,
+		helper.ZeroSum(),
+		func() ([]byte, error) {
+			return Jar(inputPath, filepath.Join(cache.FileDir, outputPath), settings)
+		},
+	)
+	return err
 }
