@@ -33,6 +33,8 @@ func DownloadHead(url string, version string, sum [16]byte, name string, setting
 
 	// remap
 	if settings.TinyJar != "" {
+		settings.From = "official"
+
 		err = remap.JarCached(filepath.Join(cache.FileDir, path+".jar"), path+"-remapped.jar", settings)
 		if err != nil {
 			return fmt.Errorf("remapping: %s", err)
