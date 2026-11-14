@@ -55,7 +55,7 @@ func Read(path string, checksum [16]byte, get func() ([]byte, error)) ([]byte, e
 	// write
 	err = Write(path, checksum, data)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "cache (w): %v", err)
+		fmt.Fprintf(os.Stderr, "cache (w): %v\n", err)
 	}
 
 	return data, nil
