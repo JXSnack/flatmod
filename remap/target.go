@@ -32,6 +32,8 @@ func DownloadMappings(settings Settings) (string, error) {
 
 	// download if not in cache
 	_, err := cache.Read(path, helper.ZeroSum(), func() ([]byte, error) {
+		helper.Vprintf("remap: downloading mappings %q\n", settings.TinyJar)
+
 		// download tinyJar
 		resp, err := http.Get(settings.TinyJar)
 		if err != nil {
