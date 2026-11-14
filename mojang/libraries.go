@@ -27,6 +27,8 @@ type Library struct {
 func DownloadLibrary(library Library, sum [16]byte) (string, error) {
 	path := filepath.Join("libraries", helper.ReValidId.ReplaceAllString(library.Name, "_")+".jar")
 	_, err := cache.Read(filepath.Join(), sum, func() ([]byte, error) {
+		helper.Vprintf("mojang: downloading %q\n", library.Name)
+
 		// download artifact
 		resp, err := http.Get(library.Downloads.Artifact.URL)
 		if err != nil {
