@@ -18,7 +18,7 @@ func DownloadTinyRemapper() (string, error) {
 	path := filepath.Join("mappings", "tiny-remapper-"+trVersion)
 
 	_, err := cache.Read(path, helper.ZeroSum(), func() ([]byte, error) {
-		resp, err := http.Get(fmt.Sprintf("https://maven.fabricmc.net/net/fabricmc/tiny-remapper/%s/tiny-remapper-%s.jar", trVersion, trVersion))
+		resp, err := http.Get(fmt.Sprintf("https://maven.fabricmc.net/net/fabricmc/tiny-remapper/%s/tiny-remapper-%s-fat.jar", trVersion, trVersion))
 		if err != nil {
 			return []byte{}, err
 		}
@@ -28,7 +28,6 @@ func DownloadTinyRemapper() (string, error) {
 			return []byte{}, err
 		}
 		return data, nil
-	},
-	)
+	})
 	return filepath.Join(cache.FileDir, path), err
 }
