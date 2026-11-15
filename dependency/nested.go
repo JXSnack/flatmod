@@ -22,7 +22,7 @@ func (v NestedVendor) Name(link string) string {
 	return filepath.Join(v.Parent+"-nested", link)
 }
 
-func (v NestedVendor) FormatGradle(link string) string {
+func (v NestedVendor) FormatGradle(link string, facet string) string {
 	panic("nested vendor should never be formatted")
 }
 

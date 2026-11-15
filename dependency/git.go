@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"path/filepath"
 	"strings"
 
+	"github.com/JXSnack/flatmod/cache"
 	"github.com/JXSnack/flatmod/dependency/gitprovider"
 	"github.com/JXSnack/flatmod/helper"
 	"github.com/JXSnack/flatmod/version"
@@ -46,16 +48,22 @@ func (g Git) DownloadJar(link string, ver version.Version, ctx DownloadContext) 
 	return data, err
 }
 
-func (g Git) FormatGradle(link string) string {
-	panic("git dependency format is not implemented")
+func (g Git) FormatGradle(link string, facet string) string {
+	cachePath := filepath.Join(cache.FileDir, "libraries", g.filenameLite(link, fmt.Sprintf("${project.dep_%s}", g.Name(link)), facet)) + ".jar"
+	abs, _ := filepath.Abs(cachePath)
+	return fmt.Sprintf("files(%q)", abs)
 }
 
 func (g Git) Filename(link string, version version.Version, facet string) string {
+	return g.filenameLite(link, helper.ReValidId.ReplaceAllString(version.String(), "_"), facet)
+}
+
+func (g Git) filenameLite(link string, version string, facet string) string {
 	return fmt.Sprintf(
 		"%s-%s-%s",
 		g.Name(link),
 		facet,
-		helper.ReValidId.ReplaceAllString(version.String(), "_"),
+		version,
 	)
 }
 

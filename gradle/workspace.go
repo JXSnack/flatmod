@@ -101,7 +101,7 @@ func (w *Workspace) Generate() error {
 				return fmt.Errorf("workspace: %w", err)
 			}
 
-			content := modfile.FillProperties(w.File, string(data))
+			content := modfile.FillProperties(w.File, string(data), w.Follow.Config.FacetPlatform)
 
 			if err := os.WriteFile(path, []byte(content), 0755); err != nil {
 				return fmt.Errorf("workspace: %w", err)

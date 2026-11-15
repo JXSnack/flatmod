@@ -46,11 +46,8 @@ func (m Maven) DownloadJar(link string, version version.Version, context Downloa
 	return make([]byte, 0), fmt.Errorf("maven dependency \"%s %s\" was not found on any repository", link, version.String())
 }
 
-func (m Maven) FormatGradle(link string) string {
-	return fmt.Sprintf(
-		"modImplementation %q",
-		fmt.Sprintf("%s:${project.dep_%s}", link, helper.ReValidId.ReplaceAllString(strings.SplitN(link, ":", 2)[1], "_")),
-	)
+func (m Maven) FormatGradle(link string, facet string) string {
+	return fmt.Sprintf("%s:${project.dep_%s}", link, m.Name(link))
 }
 
 func (m Maven) Filename(link string, version version.Version, facet string) string {

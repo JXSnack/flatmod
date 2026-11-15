@@ -125,8 +125,8 @@ func Init() {
 
 		// write
 		os.MkdirAll(filepath.Dir(target), 0700)
-		target = modfile.FillProperties(file, target)
-		data = []byte(modfile.FillProperties(file, string(data)))
+		target = modfile.FillProperties(file, target, cfg.FacetPlatform)
+		data = []byte(modfile.FillProperties(file, string(data), cfg.FacetPlatform))
 		err = os.WriteFile(target, data, 0644)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "flatmod: %v", err)

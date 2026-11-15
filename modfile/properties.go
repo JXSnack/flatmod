@@ -9,14 +9,14 @@ import (
 	"github.com/JXSnack/flatmod/helper"
 )
 
-func FillProperties(file *File, text string) string {
+func FillProperties(file *File, text string, facet string) string {
 	wd, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
 
 	text = strings.ReplaceAll(text, "%flatmod:maven%", formatMavens(file, "    "))
-	text = strings.ReplaceAll(text, "%flatmod:dependencies%", formatDependencies(file, "    "))
+	text = strings.ReplaceAll(text, "%flatmod:dependencies%", formatDependencies(file, "    ", facet))
 	text = strings.ReplaceAll(text, "%flatmod:dependency_properties%", formatDependencyProperties(file))
 	text = strings.ReplaceAll(text, "%flatmod:root%", filepath.Base(wd))
 	text = strings.ReplaceAll(text, "%flatmod:rootid%", helper.ReValidId.ReplaceAllString(filepath.Base(wd), "_"))
@@ -41,7 +41,7 @@ func formatMavens(file *File, prefix string) string {
 	return b.String()
 }
 
-func formatDependencies(file *File, prefix string) string {
+func formatDependencies(file *File, prefix string, facet string) string {
 	b := strings.Builder{}
 
 	for _, dep := range file.Dependencies {
@@ -50,7 +50,13 @@ func formatDependencies(file *File, prefix string) string {
 		}
 
 		b.WriteString(prefix)
-		b.WriteString(dep.Vendor.FormatGradle(dep.Link))
+
+		if strings.ToLower(facet) == "fabric" {
+			b.WriteString("modImplementation ")
+		} else {
+			b.WriteString("implementation ")
+		}
+		b.WriteString(dep.Vendor.FormatGradle(dep.Link, facet))
 		b.WriteString("\n")
 	}
 
