@@ -5,13 +5,11 @@ import (
 	"strings"
 
 	"github.com/JXSnack/flatmod/maven"
-	"github.com/JXSnack/flatmod/remap"
 	"github.com/JXSnack/flatmod/version"
 )
 
 type DownloadContext struct {
 	Repos []maven.Repo
-	Remap remap.Settings
 	Facet string
 }
 

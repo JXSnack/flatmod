@@ -1,11 +1,11 @@
 package idea
 
 import (
+	"fmt"
 	"io/fs"
 	"path/filepath"
 	"strings"
 
-	"github.com/JXSnack/flatmod/dependency"
 	"github.com/beevik/etree"
 )
 
@@ -25,7 +25,7 @@ func GetIML() string {
 	return iml
 }
 
-func MakeIML(platform string, group string, dependencies []dependency.Dependency) *etree.Document {
+func MakeIML(name string, platform string, group string) *etree.Document {
 	doc := etree.NewDocument()
 	doc.CreateProcInst("xml", `version="1.0" encoding="UTF-8"`)
 
@@ -41,7 +41,7 @@ func MakeIML(platform string, group string, dependencies []dependency.Dependency
 	// module root, directory highlighting & libraries
 	nmrm := appendNMRM(module)
 	appendModuleContent(nmrm, group)
-	appendLibraries(nmrm, dependencies, platform)
+	appendLibraries(nmrm, name)
 
 	return doc
 }
@@ -117,16 +117,14 @@ func appendModuleContent(nmrm *etree.Element, group string) {
 	run.CreateAttr("url", "file://$MODULE_DIR$/run")
 }
 
-func appendLibraries(nmrm *etree.Element, libraries []dependency.Dependency, facet string) {
+func appendLibraries(nmrm *etree.Element, name string) {
 	mc := nmrm.CreateElement("orderEntry")
 	mc.CreateAttr("type", "library")
-	mc.CreateAttr("name", "minecraft")
+	mc.CreateAttr("name", fmt.Sprintf("%s-minecraft", name))
 	mc.CreateAttr("level", "project")
 
-	for _, lib := range libraries {
-		e := nmrm.CreateElement("orderEntry")
-		e.CreateAttr("type", "library")
-		e.CreateAttr("name", lib.Filename(facet))
-		e.CreateAttr("level", "project")
-	}
+	deps := nmrm.CreateElement("orderEntry")
+	deps.CreateAttr("type", "library")
+	deps.CreateAttr("name", fmt.Sprintf("%s-dependencies", name))
+	deps.CreateAttr("level", "project")
 }

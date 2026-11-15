@@ -3,7 +3,6 @@ package idea
 import (
 	"fmt"
 
-	"github.com/JXSnack/flatmod/dependency"
 	"github.com/beevik/etree"
 )
 
@@ -24,24 +23,22 @@ func makeBaseLib(name string) (*etree.Document, *etree.Element) {
 	return doc, classes
 }
 
-func MakeLibrary(name string, nested []dependency.Dependency, facet string, jarSuffix string) *etree.Document {
-	doc, classes := makeBaseLib(name)
+func MakeDependencies(name string, dependencies []string) *etree.Document {
+	doc, classes := makeBaseLib(name + "-dependencies")
 
-	appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s%s.jar!/", name, jarSuffix))
-	for _, nest := range nested {
-		appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s%s.jar!/", nest.Filename(facet), jarSuffix))
+	for _, dep := range dependencies {
+		appendRootClass(classes, fmt.Sprintf("jar://%s!/", dep))
 	}
 
 	return doc
 }
 
-func MakeMinecraft(version string, libs []string, jarSuffix string) *etree.Document {
-	doc, classes := makeBaseLib("minecraft")
+func MakeMinecraft(name string, minecraft string, libraries []string) *etree.Document {
+	doc, classes := makeBaseLib(name + "-minecraft")
 
-	appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/minecraft/%s/client%s.jar!/", version, jarSuffix))
-	appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/minecraft/%s/server%s.jar!/", version, jarSuffix))
-	for _, lib := range libs {
-		appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s!/", lib))
+	appendRootClass(classes, fmt.Sprintf("jar://%s!/", minecraft))
+	for _, lib := range libraries {
+		appendRootClass(classes, fmt.Sprintf("jar://%s!/", lib))
 	}
 
 	return doc
