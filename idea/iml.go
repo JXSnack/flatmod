@@ -109,6 +109,12 @@ func appendModuleContent(nmrm *etree.Element, group string) {
 
 	dotFlatmod := content.CreateElement("excludeFolder")
 	dotFlatmod.CreateAttr("url", "file://$MODULE_DIR$/.flatmod")
+
+	dist := content.CreateElement("excludeFolder")
+	dist.CreateAttr("url", "file://$MODULE_DIR$/dist")
+
+	run := content.CreateElement("excludeFolder")
+	run.CreateAttr("url", "file://$MODULE_DIR$/run")
 }
 
 func appendLibraries(nmrm *etree.Element, libraries []dependency.Dependency) {
