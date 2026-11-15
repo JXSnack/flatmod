@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/JXSnack/flatmod/cache"
 	"github.com/JXSnack/flatmod/dependency"
 	"github.com/JXSnack/flatmod/follow"
+	"github.com/JXSnack/flatmod/helper"
 	"github.com/JXSnack/flatmod/maven"
 	"github.com/JXSnack/flatmod/modfile"
 )
@@ -17,13 +19,36 @@ var InitCommand = flag.NewFlagSet("init", flag.ExitOnError)
 
 func Init() {
 	group := InitCommand.String("group", "com.example.mod", "the group for the initialized mod")
+	merge := InitCommand.Bool("merge", false, "allow initializing an additional project in a directory that already contains one")
 
 	InitCommand.Parse(os.Args[1:])
 	args := InitCommand.Args()
 
-	if file, _ := modfile.Find(""); file != nil {
-		fmt.Fprintf(os.Stderr, "flatmod: there already exists a project in this directory\n")
-		os.Exit(1)
+	configName := "mc"
+	if file, err := modfile.Find(""); file != nil || err.Error() == "multiple .fmod files found" {
+		if *merge {
+			ok := helper.InputBoolf("A flatmod project already exists in this directory. Merging will add the new follow's configuration alongside it, and you will be asked before any existing file is overwritten. Continue? (y/n): ")
+			if !ok {
+				fmt.Println("flatmod: merge cancelled, no changes were made")
+				os.Exit(0)
+			}
+
+			configName = helper.InputStringf("Name for the new config file (e.g. \"fabric\" creates fabric.fmod): ")
+			configName = strings.TrimSuffix(configName, ".fmod")
+
+			if _, err := os.Stat(configName + ".fmod"); err == nil {
+				fmt.Fprintf(os.Stderr, "flatmod: a config named %q already exists.\n", configName+".fmod")
+				os.Exit(1)
+			}
+		} else {
+			fmt.Fprintf(os.Stderr, "flatmod: a project already exists in this directory. To add another project alongside it, run init again with -merge\n")
+			os.Exit(1)
+		}
+	} else {
+		if *merge {
+			fmt.Fprintln(os.Stderr, "flatmod: there are no other projects in this directory.")
+			os.Exit(1)
+		}
 	}
 
 	// init cache
@@ -46,7 +71,7 @@ func Init() {
 
 	// make base fmod file
 	file := &modfile.File{
-		Path: "mc.fmod",
+		Path: fmt.Sprintf("%s.fmod", configName),
 
 		Group:        *group,
 		Follow:       args[0],
@@ -82,6 +107,15 @@ func Init() {
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "flatmod: %v", err)
 			continue
+		}
+
+		if *merge {
+			if _, err := os.Stat(target); err == nil {
+				overwrite := helper.InputBoolf("The follow wants to overwrite the existing file %q. Overwrite it? (y/n): ", target)
+				if !overwrite {
+					continue
+				}
+			}
 		}
 
 		os.MkdirAll(filepath.Dir(target), 0700)
