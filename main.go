@@ -87,7 +87,7 @@ func GetMod(path string) (*modfile.File, follow.Config) {
 	// load .fmod
 	file, err := modfile.Find(path)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%v", err)
+		fmt.Fprintf(os.Stderr, "%v\n", err)
 		return nil, follow.Config{}
 	}
 
