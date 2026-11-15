@@ -39,7 +39,11 @@ func Find(path string) (*File, error) {
 		}
 
 		if !strings.HasSuffix(path, ".fmod") {
-			err = fmt.Errorf("no .fmod file in current directory")
+			if path == "." {
+				err = fmt.Errorf("no .fmod file in current directory")
+			} else {
+				err = fmt.Errorf("no .fmod file in directory %s", path)
+			}
 		}
 
 		if err != nil {
