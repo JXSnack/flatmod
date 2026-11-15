@@ -7,21 +7,29 @@
 </h1>
 
 > [!IMPORTANT]
-> Flatmod is still in development and undergoing constant breaking changes. Do not use it for 
+> Flatmod is still in development and undergoing constant breaking changes. Do not use it for
 > serious projects.
 
 An opinionated reimagination of the Minecraft modding toolchain, to ease coordination of
-multiple developers on small projects and streamline multiloader development.
+multiple developers on small projects and streamline multiloader development. It's designed for
+users experienced with modding working in teams.
+
+Flatmod removes common chores like build scripts and dependency version upkeep by letting you
+configure follow-repositories, encouraging the spread of independent features over multiple mods.
+In turn, code becomes less intertwined, dependent and testable. Other developers can quickly 
+find where changes should be made and can be assured that they have the intended effect everywhere.
 
 Usage can be found at [wiki.snackbag.net/flatmod](https://wiki.snackbag.net/flatmod).
 
 <img src=".docs/badge.png"/>
 
 ## Planned features
+
 - Manual IntelliJ directory marking or similar project-related changes
 - Run with debugger
 - Java comment preprocessor
 - No more cyclic package imports
 
 ## Honorable mentions
+
 [@ThePinkPotato](https://github.com/ThePinkPotato/) for the icon and human intelligence banner
