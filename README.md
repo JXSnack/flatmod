@@ -11,8 +11,9 @@
 > serious projects.
 
 An opinionated reimagination of the Minecraft modding toolchain, to ease coordination of
-multiple developers on small projects and streamline multiloader and -version development. It's
-based on the idea that flat development is less likely to intertwine and easier to maintain.
+multiple developers on small projects and streamline multiloader development.
+
+Usage can be found at [wiki.snackbag.net/flatmod](https://wiki.snackbag.net/flatmod).
 
 <img src=".docs/badge.png"/>
 
