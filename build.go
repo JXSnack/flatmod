@@ -34,7 +34,7 @@ func Build() {
 	}
 
 	// execute build
-	args := []string{"build"}
+	args := []string{"build", "--quiet"}
 	if *out != "" {
 		args = append(args, fmt.Sprintf("-PjarName=%s", *out))
 	}
