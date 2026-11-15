@@ -24,15 +24,18 @@ func Init() {
 	InitCommand.Parse(os.Args[1:])
 	args := InitCommand.Args()
 
+	// check if project already exists
 	configName := "mc"
 	if file, err := modfile.Find(""); file != nil || err.Error() == "multiple .fmod files found" {
 		if *merge {
+			// merge permission
 			ok := helper.InputBoolf("A flatmod project already exists in this directory. Merging will add the new follow's configuration alongside it, and you will be asked before any existing file is overwritten. Continue? (y/n): ")
 			if !ok {
 				fmt.Println("flatmod: merge cancelled, no changes were made")
 				os.Exit(0)
 			}
 
+			// config name
 			configName = helper.InputStringf("Name for the new config file (e.g. \"fabric\" creates fabric.fmod): ")
 			configName = strings.TrimSuffix(configName, ".fmod")
 
@@ -45,6 +48,7 @@ func Init() {
 			os.Exit(1)
 		}
 	} else {
+		// only merge with multiple projects
 		if *merge {
 			fmt.Fprintln(os.Stderr, "flatmod: there are no other projects in this directory.")
 			os.Exit(1)
@@ -109,6 +113,7 @@ func Init() {
 			continue
 		}
 
+		// don't overwrite files without permission
 		if *merge {
 			if _, err := os.Stat(target); err == nil {
 				overwrite := helper.InputBoolf("The follow wants to overwrite the existing file %q. Overwrite it? (y/n): ", target)
@@ -118,6 +123,7 @@ func Init() {
 			}
 		}
 
+		// write
 		os.MkdirAll(filepath.Dir(target), 0700)
 		target = modfile.FillProperties(file, target)
 		data = []byte(modfile.FillProperties(file, string(data)))
