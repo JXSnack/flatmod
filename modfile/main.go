@@ -17,8 +17,10 @@ type File struct {
 	Group        string
 	Follow       string
 	FollowBranch string
+
 	Dependencies []dependency.Dependency
 	Mavens       []maven.Repo
+	IgnoredPaths []string // IgnoredPaths are the source paths that are not included when generating the workspace
 }
 
 func Read(data []byte, path string) (*File, []error) {
@@ -59,6 +61,8 @@ func Read(data []byte, path string) (*File, []error) {
 			err = applyMavenInstruction(file, body)
 		case "require":
 			err = applyRequireInstruction(file, body)
+		case "ignore":
+			err = applyIgnoreInstruction(file, body)
 		default:
 			errs = append(errs, fmt.Errorf("unknown statement: %s", name))
 			continue
