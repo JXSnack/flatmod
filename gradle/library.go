@@ -13,7 +13,7 @@ import (
 // DownloadLib downloads a dependency and remaps it to the given mappings
 func DownloadLib(dep dependency.Dependency, ctx dependency.DownloadContext) ([]byte, error) {
 	// download jar
-	filename := dep.Filename()
+	filename := dep.Filename(ctx.Facet)
 	jar, err := cache.Read(
 		filepath.Join("libraries", filename+".jar"),
 		helper.ZeroSum(),

@@ -19,7 +19,7 @@ type Vendor interface {
 	Identifier() string
 	DownloadJar(link string, version version.Version, context DownloadContext) ([]byte, error)
 	FormatGradle(link string) string
-	Filename(link string, version version.Version) string
+	Filename(link string, version version.Version, facet string) string
 	Name(link string) string
 }
 

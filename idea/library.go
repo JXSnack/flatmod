@@ -24,12 +24,12 @@ func makeBaseLib(name string) (*etree.Document, *etree.Element) {
 	return doc, classes
 }
 
-func MakeLibrary(name string, nested []dependency.Dependency, jarSuffix string) *etree.Document {
+func MakeLibrary(name string, nested []dependency.Dependency, facet string, jarSuffix string) *etree.Document {
 	doc, classes := makeBaseLib(name)
 
 	appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s%s.jar!/", name, jarSuffix))
 	for _, nest := range nested {
-		appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s%s.jar!/", nest.Filename(), jarSuffix))
+		appendRootClass(classes, fmt.Sprintf("jar://$USER_HOME$/.flatmod/cache/libraries/%s%s.jar!/", nest.Filename(facet), jarSuffix))
 	}
 
 	return doc

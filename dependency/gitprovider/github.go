@@ -1,18 +1,29 @@
-package main
+package gitprovider
 
 import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"regexp"
 	"strings"
 
 	"github.com/JXSnack/flatmod/version"
 )
 
+var ReGitHubRepo = regexp.MustCompile(`github\.com/([A-Za-z0-9-]+)/([A-Za-z0-9_.-]+)`)
+
 type GitHubProvider struct {
 }
 
-func (p GitHubProvider) GetRelease(owner string, repo string, version version.Semantic) (Release, error) {
+func (p GitHubProvider) GetRelease(link string, version version.Semantic) (Release, error) {
+	matches := ReGitHubRepo.FindStringSubmatch(link)
+	if len(matches) != 3 {
+		return Release{}, fmt.Errorf("invalid github url. expected github.com/<owner>/<repo>")
+	}
+
+	owner := matches[1]
+	repo := matches[2]
+
 	// download release
 	data, err := http.Get(fmt.Sprintf("https://api.github.com/repos/%s/%s/releases", owner, repo))
 	if err != nil {
@@ -56,7 +67,7 @@ func (p GitHubProvider) GetRelease(owner string, repo string, version version.Se
 	return Release{}, fmt.Errorf("no release with tag %s", version.String())
 }
 
-func (p GitHubProvider) DownloadAsset(release Release, facet string) (Asset, error) {
+func (p GitHubProvider) GetAsset(release Release, facet string) (Asset, error) {
 	// filter out only jars
 	jars := make([]Asset, 0)
 	for _, asset := range release.Assets {

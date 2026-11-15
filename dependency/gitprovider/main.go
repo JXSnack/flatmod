@@ -1,10 +1,10 @@
-package main
+package gitprovider
 
 import "github.com/JXSnack/flatmod/version"
 
 type ReleaseProvider interface {
-	GetRelease(owner string, repo string, version version.Semantic) (Release, error)
-	DownloadAsset(release Release, facet string) (Asset, error)
+	GetRelease(link string, version version.Semantic) (Release, error)
+	GetAsset(release Release, facet string) (Asset, error)
 }
 
 type Release struct {

@@ -41,7 +41,7 @@ func MakeIML(platform string, group string, dependencies []dependency.Dependency
 	// module root, directory highlighting & libraries
 	nmrm := appendNMRM(module)
 	appendModuleContent(nmrm, group)
-	appendLibraries(nmrm, dependencies)
+	appendLibraries(nmrm, dependencies, platform)
 
 	return doc
 }
@@ -117,7 +117,7 @@ func appendModuleContent(nmrm *etree.Element, group string) {
 	run.CreateAttr("url", "file://$MODULE_DIR$/run")
 }
 
-func appendLibraries(nmrm *etree.Element, libraries []dependency.Dependency) {
+func appendLibraries(nmrm *etree.Element, libraries []dependency.Dependency, facet string) {
 	mc := nmrm.CreateElement("orderEntry")
 	mc.CreateAttr("type", "library")
 	mc.CreateAttr("name", "minecraft")
@@ -126,7 +126,7 @@ func appendLibraries(nmrm *etree.Element, libraries []dependency.Dependency) {
 	for _, lib := range libraries {
 		e := nmrm.CreateElement("orderEntry")
 		e.CreateAttr("type", "library")
-		e.CreateAttr("name", lib.Filename())
+		e.CreateAttr("name", lib.Filename(facet))
 		e.CreateAttr("level", "project")
 	}
 }

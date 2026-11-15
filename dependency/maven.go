@@ -53,7 +53,7 @@ func (m Maven) FormatGradle(link string) string {
 	)
 }
 
-func (m Maven) Filename(link string, version version.Version) string {
+func (m Maven) Filename(link string, version version.Version, facet string) string {
 	return fmt.Sprintf(
 		"%s-%s",
 		m.Name(link),

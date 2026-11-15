@@ -92,7 +92,7 @@ func Idea() {
 		dependencies[dep] = make([]dependency.Dependency, 0)
 
 		// extract nested jars
-		nests, err := gradle.ExtractNestedJars(dep.Filename(), jar, ctx)
+		nests, err := gradle.ExtractNestedJars(dep.Filename(cfg.FacetPlatform), jar, ctx)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "flatmod: failed to extract %q: %v\n", dep.Link, err)
 			failed = true
@@ -100,7 +100,7 @@ func Idea() {
 
 		for _, nest := range nests {
 			dependencies[dep] = append(dependencies[dep], dependency.Dependency{
-				Vendor:     dependency.NestedVendor{Parent: dep.Filename()},
+				Vendor:     dependency.NestedVendor{Parent: dep.Filename(cfg.FacetPlatform)},
 				Link:       nest,
 				Version:    nil,
 				Indirect:   dep.Indirect,
@@ -147,10 +147,10 @@ func Idea() {
 
 	// generate libraries
 	for _, dep := range file.Dependencies {
-		doc := idea.MakeLibrary(dep.Filename(), dependencies[dep], suffix)
+		doc := idea.MakeLibrary(dep.Filename(cfg.FacetPlatform), dependencies[dep], cfg.FacetPlatform, suffix)
 		doc.Indent(2)
 
-		err := doc.WriteToFile(filepath.Join(".idea", "libraries", dep.Filename()+".xml"))
+		err := doc.WriteToFile(filepath.Join(".idea", "libraries", dep.Filename(cfg.FacetPlatform)+".xml"))
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "flatmod: %v\n", err)
 			os.Exit(1)

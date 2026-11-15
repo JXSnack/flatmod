@@ -39,8 +39,8 @@ func (d Dependency) FormatFlatmod() string {
 }
 
 // Filename returns a filename for the dependency without any extension
-func (d Dependency) Filename() string {
-	return d.Vendor.Filename(d.Link, d.Version)
+func (d Dependency) Filename(facet string) string {
+	return d.Vendor.Filename(d.Link, d.Version, facet)
 }
 
 // Name returns only the dependency name without any link attributes

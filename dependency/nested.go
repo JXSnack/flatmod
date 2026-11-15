@@ -14,7 +14,7 @@ func (v NestedVendor) Identifier() string {
 	return "nested"
 }
 
-func (v NestedVendor) Filename(link string, version version.Version) string {
+func (v NestedVendor) Filename(link string, version version.Version, facet string) string {
 	return v.Name(link)
 }
 
