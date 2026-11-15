@@ -16,5 +16,9 @@ based on the idea that flat development is less likely to intertwine and easier 
 
 <img src=".docs/badge.png"/>
 
+## Missing features
+- Debug mode
+- Manual IntelliJ directory marking or similar project-related changes
+
 ## Honorable mentions
 [@ThePinkPotato](https://github.com/ThePinkPotato/) for the icon and human intelligence banner
