@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/JXSnack/flatmod/cache"
 	"github.com/JXSnack/flatmod/dependency"
@@ -83,6 +84,7 @@ func Init() {
 			continue
 		}
 
+		os.MkdirAll(filepath.Dir(target), 0700)
 		target = modfile.FillProperties(file, target)
 		data = []byte(modfile.FillProperties(file, string(data)))
 		err = os.WriteFile(target, data, 0644)
