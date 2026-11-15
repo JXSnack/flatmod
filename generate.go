@@ -12,7 +12,7 @@ var GenerateCommand = flag.NewFlagSet("gen", flag.ExitOnError)
 
 func Generate() {
 	path := PathFlag(GenerateCommand)
-	GenerateCommand.Parse(os.Args[:1])
+	GenerateCommand.Parse(os.Args[1:])
 
 	file, _ := GetMod(*path)
 	if file == nil {
