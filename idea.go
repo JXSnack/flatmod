@@ -130,13 +130,13 @@ func Idea() {
 	// make jar suffixes
 	var suffix string
 	if cfg.Remap.Enabled {
-		suffix = ""
-	} else {
 		suffix = "-remapped"
+	} else {
+		suffix = ""
 	}
 
 	// minecraft dependency
-	mc := idea.MakeMinecraft(mcVersion.Id, mcLibs, suffix)
+	mc := idea.MakeMinecraft(mcVersion.Id, mcLibs, "-remapped")
 	mc.Indent(2)
 
 	err = mc.WriteToFile(filepath.Join(".idea", "libraries", fmt.Sprintf("minecraft.xml")))
