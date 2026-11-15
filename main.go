@@ -37,6 +37,7 @@ func main() {
 		fmt.Println("Usage: fmod [global args] <command> [command args]")
 		fmt.Println()
 		fmt.Println("All commands:")
+		fmt.Println("\tbuild\tbuilds the mod")
 		fmt.Println("\tcheck\tread configuration files for errors")
 		fmt.Println("\tclean\tremove cached files")
 		fmt.Println("\tgen\tmanually create the gradle workspace")
@@ -60,6 +61,8 @@ func main() {
 	os.Args = append([]string{os.Args[0]}, args[commandIndex+1:]...)
 
 	switch command {
+	case "build":
+		Build()
 	case "check":
 		Check()
 	case "clean":
