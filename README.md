@@ -17,9 +17,11 @@ Usage can be found at [wiki.snackbag.net/flatmod](https://wiki.snackbag.net/flat
 
 <img src=".docs/badge.png"/>
 
-## Missing features
-- Debug mode
+## Planned features
 - Manual IntelliJ directory marking or similar project-related changes
+- Run with debugger
+- Java comment preprocessor
+- No more cyclic package imports
 
 ## Honorable mentions
 [@ThePinkPotato](https://github.com/ThePinkPotato/) for the icon and human intelligence banner
