@@ -14,7 +14,7 @@ type Artifact struct {
 
 func NewArtifact(coord string) (Artifact, error) {
 	parts := strings.Split(coord, ":")
-	if len(parts) != 3 || len(parts) != 4 {
+	if len(parts) != 3 && len(parts) != 4 {
 		return Artifact{}, fmt.Errorf("invalid maven coordinate: %q", coord)
 	}
 	classifier := ""
