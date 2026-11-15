@@ -39,7 +39,7 @@ func main() {
 		fmt.Println("All commands:")
 		fmt.Println("\tcheck\tread configuration files for errors")
 		fmt.Println("\tclean\tremove cached files")
-		fmt.Println("\tgenerate\tmanually create the gradle workspace")
+		fmt.Println("\tgen\tmanually create the gradle workspace")
 		fmt.Println("\tgradle\trun gradle command")
 		fmt.Println("\tidea\tupdate IntelliJ configuration")
 		fmt.Println("\tinit\tcreate a new project")
@@ -64,7 +64,7 @@ func main() {
 		Check()
 	case "clean":
 		Clean()
-	case "generate":
+	case "gen":
 		Generate()
 	case "gradle":
 		Gradle()
