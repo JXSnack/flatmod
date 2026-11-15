@@ -128,7 +128,7 @@ func Idea() {
 
 	// make jar suffixes
 	var suffix string
-	if cfg.Remap.TinyJar == "" {
+	if cfg.Remap.Enabled {
 		suffix = ""
 	} else {
 		suffix = "-remapped"

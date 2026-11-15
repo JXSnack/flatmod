@@ -39,6 +39,8 @@ func DownloadHead(url string, version string, sum [16]byte, name string, setting
 		if err != nil {
 			return fmt.Errorf("remapping: %s", err)
 		}
+	} else {
+		return fmt.Errorf("skipping remap because remap is missing key tinyJar")
 	}
 
 	return nil

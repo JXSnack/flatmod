@@ -43,7 +43,7 @@ func ExtractNestedJars(parentName string, jar []byte, ctx dependency.DownloadCon
 			cache.Write(nestedPath+".jar", helper.ZeroSum(), nest)
 
 			// remap
-			if ctx.Remap.TinyJar != "" {
+			if ctx.Remap.Enabled {
 				if err = remap.JarCached(
 					filepath.Join(cache.FileDir, nestedPath+".jar"),
 					filepath.Join(nestedPath+"-remapped.jar"),

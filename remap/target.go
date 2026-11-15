@@ -15,6 +15,7 @@ import (
 )
 
 type Settings struct {
+	Enabled  bool   `json:"enabled"`
 	TinyJar  string `json:"tinyJar"`
 	TinyPath string `json:"tinyPath"`
 	From     string `json:"from"`
