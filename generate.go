@@ -8,7 +8,7 @@ import (
 	"github.com/JXSnack/flatmod/gradle"
 )
 
-var GenerateCommand = flag.NewFlagSet("generate", flag.ExitOnError)
+var GenerateCommand = flag.NewFlagSet("gen", flag.ExitOnError)
 
 func Generate() {
 	path := PathFlag(GenerateCommand)
