@@ -47,7 +47,7 @@ func (m Maven) DownloadJar(link string, version version.Version, context Downloa
 }
 
 func (m Maven) FormatGradle(link string, facet string) string {
-	return fmt.Sprintf("%s:${project.dep_%s}", link, m.Name(link))
+	return fmt.Sprintf("%q", fmt.Sprintf("%s:${project.dep_%s}", link, m.Name(link)))
 }
 
 func (m Maven) Filename(link string, version version.Version, facet string) string {
