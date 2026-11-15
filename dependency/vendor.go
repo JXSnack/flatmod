@@ -12,6 +12,7 @@ import (
 type DownloadContext struct {
 	Repos []maven.Repo
 	Remap remap.Settings
+	Facet string
 }
 
 type Vendor interface {
