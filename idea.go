@@ -49,17 +49,31 @@ func Idea() {
 	}
 
 	// make XML
+	os.MkdirAll(filepath.Join(".idea", "libraries"), 0700)
+
 	name := filepath.Base(strings.TrimSuffix(file.Path, ".fmod"))
 	mc := idea.MakeMinecraft(name, classpaths.Minecraft, classpaths.MinecraftLibraries)
 	mc.Indent(4)
-	mc.WriteToFile(filepath.Join(".idea", "libraries", fmt.Sprintf("%s-minecraft.xml", name)))
+	err = mc.WriteToFile(filepath.Join(".idea", "libraries", fmt.Sprintf("%s-minecraft.xml", name)))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "flatmod: %v\n", err)
+		os.Exit(1)
+	}
 
 	libs := idea.MakeDependencies(name, classpaths.Dependencies)
 	libs.Indent(4)
-	libs.WriteToFile(filepath.Join(".idea", "libraries", fmt.Sprintf("%s-dependencies.xml", name)))
+	err = libs.WriteToFile(filepath.Join(".idea", "libraries", fmt.Sprintf("%s-dependencies.xml", name)))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "flatmod: %v\n", err)
+		os.Exit(1)
+	}
 
 	// make IML
 	doc := idea.MakeIML(name, cfg.FacetPlatform, file.Group)
 	doc.Indent(2)
-	doc.WriteToFile(filepath.Join(".idea", "flatmod-project.iml"))
+	err = doc.WriteToFile(filepath.Join(".idea", "flatmod-project.iml"))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "flatmod: %v\n", err)
+		os.Exit(1)
+	}
 }
