@@ -2,12 +2,9 @@ package dependency
 
 import (
 	"fmt"
-	"io"
-	"net/http"
 	"strings"
 
 	"github.com/JXSnack/flatmod/helper"
-	"github.com/JXSnack/flatmod/maven"
 	"github.com/JXSnack/flatmod/version"
 )
 
@@ -19,31 +16,7 @@ func (m Maven) Identifier() string {
 }
 
 func (m Maven) DownloadJar(link string, version version.Version, context DownloadContext) ([]byte, error) {
-	artifact, err := maven.NewArtifact(fmt.Sprintf("%s:%s", link, version.String()))
-	if err != nil {
-		return []byte{}, err
-	}
-
-	for _, repo := range context.Repos {
-		url := artifact.JarURL(repo.Link)
-		resp, err := http.Get(url)
-		if err != nil {
-			return []byte{}, err
-		}
-		defer resp.Body.Close()
-
-		if resp.StatusCode != http.StatusOK {
-			continue
-		}
-
-		body, err := io.ReadAll(resp.Body)
-		if err != nil {
-			return []byte{}, err
-		}
-
-		return body, nil
-	}
-	return make([]byte, 0), fmt.Errorf("maven dependency \"%s %s\" was not found on any repository", link, version.String())
+	panic("maven vendor should never download")
 }
 
 func (m Maven) FormatGradle(link string, facet string) string {
@@ -51,13 +24,13 @@ func (m Maven) FormatGradle(link string, facet string) string {
 }
 
 func (m Maven) Filename(link string, version version.Version, facet string) string {
-	return fmt.Sprintf(
-		"%s-%s",
-		m.Name(link),
-		helper.ReValidId.ReplaceAllString(version.String(), "_"),
-	)
+	panic("should not create filename for maven vendor")
 }
 
 func (m Maven) Name(link string) string {
 	return helper.ReValidId.ReplaceAllString(strings.SplitN(link, ":", 2)[1], "_")
+}
+
+func (m Maven) ShouldDownload() bool {
+	return false
 }

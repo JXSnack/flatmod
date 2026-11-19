@@ -4,17 +4,16 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/JXSnack/flatmod/maven"
 	"github.com/JXSnack/flatmod/version"
 )
 
 type DownloadContext struct {
-	Repos []maven.Repo
 	Facet string
 }
 
 type Vendor interface {
 	Identifier() string
+	ShouldDownload() bool
 	DownloadJar(link string, version version.Version, context DownloadContext) ([]byte, error)
 	FormatGradle(link string, facet string) string
 	Filename(link string, version version.Version, facet string) string

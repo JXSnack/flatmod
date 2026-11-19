@@ -29,3 +29,7 @@ func (v NestedVendor) FormatGradle(link string, facet string) string {
 func (v NestedVendor) DownloadJar(link string, version version.Version, context DownloadContext) ([]byte, error) {
 	panic("nested vendor should never download")
 }
+
+func (v NestedVendor) ShouldDownload() bool {
+	return false
+}

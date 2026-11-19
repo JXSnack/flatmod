@@ -55,7 +55,7 @@ func (g Git) FormatGradle(link string, facet string) string {
 }
 
 func (g Git) Filename(link string, version version.Version, facet string) string {
-	return g.filenameLite(link, helper.ReValidId.ReplaceAllString(version.String(), "_"), facet)
+	return g.filenameLite(link, version.String(), facet)
 }
 
 func (g Git) filenameLite(link string, version string, facet string) string {
@@ -69,4 +69,8 @@ func (g Git) filenameLite(link string, version string, facet string) string {
 
 func (g Git) Name(link string) string {
 	return helper.ReValidId.ReplaceAllString(strings.SplitN(link, "/", 2)[1], "_")
+}
+
+func (g Git) ShouldDownload() bool {
+	return true
 }

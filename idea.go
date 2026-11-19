@@ -7,7 +7,10 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/JXSnack/flatmod/cache"
+	"github.com/JXSnack/flatmod/dependency"
 	"github.com/JXSnack/flatmod/gradle"
+	"github.com/JXSnack/flatmod/helper"
 	"github.com/JXSnack/flatmod/idea"
 )
 
@@ -41,8 +44,26 @@ func Idea() {
 		os.Exit(1)
 	}
 
+	// download local dependencies
+	ctx := dependency.DownloadContext{Facet: cfg.FacetPlatform}
+	for _, dep := range workspace.File.Dependencies {
+		if !dep.Vendor.ShouldDownload() {
+			continue
+		}
+
+		_, err = cache.Read(filepath.Join("libraries", dep.Filename(cfg.FacetPlatform)+".jar"),
+			helper.ZeroSum(), func() ([]byte, error) {
+				fmt.Printf("flatmod: downloading %q (%s)\n", dep.Link, dep.Version.String())
+				return dep.Vendor.DownloadJar(dep.Link, dep.Version, ctx)
+			},
+		)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "flatmod: failed to download %q: %v", dep.Link, err)
+		}
+	}
+
 	// get minecraft & jars
-	classpaths, err := workspace.GetClasspath()
+	classpath, err := workspace.GetClasspath()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "flatmod: %v\n", err)
 		os.Exit(1)
@@ -52,7 +73,7 @@ func Idea() {
 	os.MkdirAll(filepath.Join(".idea", "libraries"), 0700)
 
 	name := filepath.Base(strings.TrimSuffix(file.Path, ".fmod"))
-	mc := idea.MakeMinecraft(name, classpaths.Minecraft, classpaths.MinecraftLibraries)
+	mc := idea.MakeMinecraft(name, classpath.Minecraft, classpath.MinecraftLibraries)
 	mc.Indent(4)
 	err = mc.WriteToFile(filepath.Join(".idea", "libraries", fmt.Sprintf("%s-minecraft.xml", name)))
 	if err != nil {
@@ -60,7 +81,7 @@ func Idea() {
 		os.Exit(1)
 	}
 
-	libs := idea.MakeDependencies(name, classpaths.Dependencies)
+	libs := idea.MakeDependencies(name, classpath.Dependencies)
 	libs.Indent(4)
 	err = libs.WriteToFile(filepath.Join(".idea", "libraries", fmt.Sprintf("%s-dependencies.xml", name)))
 	if err != nil {
