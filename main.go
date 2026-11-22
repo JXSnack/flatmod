@@ -10,6 +10,7 @@ import (
 	"github.com/JXSnack/flatmod/follow"
 	"github.com/JXSnack/flatmod/helper"
 	"github.com/JXSnack/flatmod/modfile"
+	"github.com/JXSnack/flatmod/updater"
 )
 
 func main() {
@@ -19,6 +20,7 @@ func main() {
 	verbose := globalFlags.Bool("v", false, "print more information")
 	gitHTTPS := globalFlags.Bool("git-https", false, "use https instead of ssh for git connections")
 	noCache := globalFlags.Bool("no-cache", false, "disable cache reading and writing")
+	noUpdate := globalFlags.Bool("no-update", false, "disable update checking")
 
 	// find command beginning
 	args := os.Args[1:]
@@ -44,6 +46,7 @@ func main() {
 		fmt.Println("\tgradle\trun gradle command")
 		fmt.Println("\tidea\tupdate IntelliJ configuration")
 		fmt.Println("\tinit\tcreate a new project")
+		fmt.Println("\tversion\tprint installed version")
 		return
 	}
 
@@ -56,6 +59,20 @@ func main() {
 	helper.ForceGitHTTPS = *gitHTTPS
 	helper.CacheEnabled = !*noCache
 
+	// check update
+	if !*noUpdate {
+		updateMsg, err := updater.CheckUpdates()
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "flatmod: update check failed: %v\n", err)
+		}
+
+		if updateMsg != "" {
+			fmt.Println(updateMsg)
+			fmt.Println()
+		}
+	}
+
+	// do command
 	command := os.Args[commandIndex+1]
 	os.Args = append([]string{os.Args[0]}, args[commandIndex+1:]...)
 
@@ -74,6 +91,8 @@ func main() {
 		Idea()
 	case "init":
 		Init()
+	case "version":
+		Version()
 	default:
 		fmt.Fprintln(os.Stderr, fmt.Sprintf("%s: unknown command", command))
 		os.Exit(1)
