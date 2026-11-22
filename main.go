@@ -44,7 +44,6 @@ func main() {
 		fmt.Println("\tgradle\trun gradle command")
 		fmt.Println("\tidea\tupdate IntelliJ configuration")
 		fmt.Println("\tinit\tcreate a new project")
-		fmt.Println("\ttidy\tensure .fmod matches source code")
 		return
 	}
 
@@ -75,8 +74,6 @@ func main() {
 		Idea()
 	case "init":
 		Init()
-	case "tidy":
-		Tidy()
 	default:
 		fmt.Fprintln(os.Stderr, fmt.Sprintf("%s: unknown command", command))
 		os.Exit(1)
